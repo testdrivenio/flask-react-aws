@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <form>
+    <div
+      class="field"
+    >
+      <label
+        class="label"
+        for="input-username"
+      >
+        Username
+      </label>
+      <input
+        class="input"
+        id="input-username"
+        name="username"
+        placeholder="Enter a username"
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      class="field"
+    >
+      <label
+        class="label"
+        for="input-email"
+      >
+        Email
+      </label>
+      <input
+        class="input"
+        id="input-email"
+        name="email"
+        placeholder="Enter an email address"
+        type="email"
+        value=""
+      />
+    </div>
+    <div
+      class="field"
+    >
+      <label
+        class="label"
+        for="input-password"
+      >
+        Password
+      </label>
+      <input
+        class="input"
+        id="input-password"
+        name="password"
+        placeholder="Enter a password"
+        type="password"
+        value=""
+      />
+    </div>
+    <input
+      class="button is-primary"
+      type="submit"
+      value="Submit"
+    />
+  </form>
+</DocumentFragment>
+`;

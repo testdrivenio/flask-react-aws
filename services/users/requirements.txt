@@ -1,0 +1,13 @@
+black==19.3b0
+flake8===3.7.7
+Flask==1.0.3
+flask-bcrypt==0.7.1
+Flask-RESTful==0.3.7
+Flask-SQLAlchemy==2.4.0
+gunicorn==19.9.0
+isort==4.3.20
+pyjwt==1.7.1
+psycopg2-binary==2.8.2
+pytest==4.5.0
+pytest-cov==2.7.1
+flask-cors==3.0.7
