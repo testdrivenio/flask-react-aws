@@ -11,7 +11,7 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - COMMIT=$(echo $CODEBUILD_SOURCE_VERSION | head -c 8)
+      - COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
       - echo $COMMIT
       - echo logging in to ecr...
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
