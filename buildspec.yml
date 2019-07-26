@@ -40,6 +40,6 @@ phases:
           ./services/client
   post_build:
     commands:
-    - pushing prod images to ecr...
+    - echo pushing prod images to ecr...
     - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod
     - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod
