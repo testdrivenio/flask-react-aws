@@ -15,36 +15,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
   build:
     commands:
-      - COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
-      - echo building and testing dev images...
-      - docker-compose up -d --build
-      - docker-compose exec -T users pytest "project/tests" -p no:warnings
-      - docker-compose exec -T users flake8 project
-      - docker-compose exec -T users black project --check
-      - docker-compose exec -T users /bin/bash -c "isort project/*/*.py" --check-only
-      - docker-compose exec -T client react-scripts test --watchAll --watchAll=false
-      - docker-compose exec -T client npm run lint
-      - docker-compose exec -T client npm run prettier:check
-      - docker-compose exec -T client npm run prettier:write
-      - echo building prod images...
-      - >
-        docker build \
-          -f services/users/Dockerfile.prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$COMMIT \
-          ./services/users
-      - >
-        docker build \
-          -f services/client/Dockerfile.prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$COMMIT \
-          --build-arg NODE_ENV=production \
-          --build-arg REACT_APP_USERS_SERVICE_URL=$REACT_APP_USERS_SERVICE_URL \
-          ./services/client
+      - bash build.sh
   post_build:
     commands:
-    - echo pushing prod images to ecr...
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$COMMIT
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$COMMIT
+      - bash post_build.sh
