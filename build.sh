@@ -13,15 +13,18 @@ docker-compose exec -T client npm run lint
 docker-compose exec -T client npm run prettier:check
 docker-compose exec -T client npm run prettier:write
 
-if [ "$CODEBUILD_GIT_BRANCH" == "prod" ] then
+if [ "$CODEBUILD_GIT_BRANCH" == "prod" ]
+then
   echo building prod images...
   docker build \
     -f services/users/Dockerfile.prod \
     -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod \
+    -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$COMMIT \
     ./services/users
   docker build \
     -f services/client/Dockerfile.prod \
     -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod \
+    -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$COMMIT \
     --build-arg NODE_ENV=production \
     --build-arg REACT_APP_USERS_SERVICE_URL=$REACT_APP_USERS_SERVICE_URL \
     ./services/client
