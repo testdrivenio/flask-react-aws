@@ -11,12 +11,11 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
-      - echo $COMMIT
       - echo logging in to ecr...
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
   build:
     commands:
+      - COMMIT=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)
       - echo building and testing dev images...
       - docker-compose up -d --build
       - docker-compose exec -T users pytest "project/tests" -p no:warnings
