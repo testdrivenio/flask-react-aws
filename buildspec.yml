@@ -4,7 +4,6 @@ env:
   variables:
     AWS_REGION: "us-west-1"
     REACT_APP_USERS_SERVICE_URL: "http://localhost:5001"
-    COMMIT: $(echo $CODEBUILD_SOURCE_VERSION | head -c 8)
 
 phases:
   install:
@@ -12,6 +11,7 @@ phases:
       docker: 18
   pre_build:
     commands:
+      - COMMIT=$(echo $CODEBUILD_SOURCE_VERSION | head -c 8)
       - echo $COMMIT
       - echo logging in to ecr...
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
