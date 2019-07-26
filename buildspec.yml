@@ -4,7 +4,7 @@ env:
   variables:
     AWS_REGION: "us-west-1"
     REACT_APP_USERS_SERVICE_URL: "http://localhost:5001"
-    COMMIT: $CODEBUILD_RESOLVED_SOURCE_VERSION::8
+    COMMIT: $(echo $CODEBUILD_SOURCE_VERSION | head -c 8)
 
 phases:
   install:
