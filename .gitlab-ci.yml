@@ -1,0 +1,70 @@
+image: docker:stable
+
+stages:
+  - build-users
+  - test-users
+  - build-client
+  - test-client
+
+variables:
+  IMAGE: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+
+build-users:
+  stage: build-users
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $IMAGE:users || true
+    - docker build
+        --cache-from $IMAGE:users
+        --tag $IMAGE:users
+        --file ./services/users/Dockerfile.prod
+        "./services/users"
+    - docker push $IMAGE:users
+
+test-users:
+  stage: test-users
+  image: $IMAGE:users
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: users
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: ""
+    DATABASE_TEST_URL: postgres://runner@postgres:5432/users
+    FLASK_ENV: development
+  script:
+    - cd /usr/src/app
+    - pytest "project/tests" -p no:warnings
+    - flake8 project
+    - black project --check
+    - isort project/**/*.py --check-only
+
+build-client:
+  stage: build-client
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    REACT_APP_USERS_SERVICE_URL: http://localhost:5001
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull $IMAGE:client || true
+    - docker build
+        --cache-from $IMAGE:client
+        --tag $IMAGE:client
+        --file ./services/client/Dockerfile.ci
+        "./services/client"
+    - docker push $IMAGE:client
+
+test-client:
+  stage: test-client
+  image: $IMAGE:client
+  script:
+    - cd /usr/src/app
+    - npm run prettier:check
+    - npm run lint
+    - npm run test
