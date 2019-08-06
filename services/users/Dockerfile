@@ -1,11 +1,10 @@
 # pull official base image
-FROM python:3.7.4-alpine
+FROM python:3.7.4-slim
 
-# install dependencies
-RUN apk update && \
-    apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add postgresql-dev && \
-    apk add netcat-openbsd
+# install netcat
+RUN apt-get update && \
+    apt-get -y install netcat && \
+    apt-get clean
 
 # set environment varibles
 ENV PYTHONDONTWRITEBYTECODE 1
