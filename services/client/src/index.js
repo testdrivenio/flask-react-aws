@@ -10,7 +10,7 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      username: "foo",
+      username: "",
       email: ""
     };
     this.addUser = this.addUser.bind(this);
