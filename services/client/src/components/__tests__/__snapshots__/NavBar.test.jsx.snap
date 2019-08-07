@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <nav
+    aria-label="main navigation"
+    class="navbar is-dark"
+    role="navigation"
+  >
+    <section
+      class="container"
+    >
+      <div
+        class="navbar-brand"
+      >
+        <a
+          class="navbar-item nav-title"
+          href="/"
+          style="font-weight: bold;"
+        >
+          Hello, World!
+        </a>
+        <span
+          class="nav-toggle navbar-burger"
+        >
+          <span />
+          <span />
+          <span />
+        </span>
+      </div>
+      <div
+        class="navbar-menu"
+      >
+        <div
+          class="navbar-start"
+        >
+          <a
+            class="navbar-item"
+            href="/about"
+          >
+            About
+          </a>
+          <a
+            class="navbar-item"
+            href="/status"
+          >
+            User Status
+          </a>
+        </div>
+        <div
+          class="navbar-end"
+        >
+          <a
+            class="navbar-item"
+            href="/register"
+          >
+            Register
+          </a>
+          <a
+            class="navbar-item"
+            href="/login"
+          >
+            Log In
+          </a>
+          <a
+            class="navbar-item"
+            href="/logout"
+          >
+            Log Out
+          </a>
+        </div>
+      </div>
+    </section>
+  </nav>
+</DocumentFragment>
+`;

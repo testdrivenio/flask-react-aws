@@ -2,79 +2,151 @@
 
 exports[`renders 1`] = `
 <DocumentFragment>
-  <section
-    class="section"
-  >
-    <div
-      class="container"
+  <div>
+    <nav
+      aria-label="main navigation"
+      class="navbar is-dark"
+      role="navigation"
     >
-      <div
-        class="columns"
+      <section
+        class="container"
       >
         <div
-          class="column is-half"
+          class="navbar-brand"
         >
-          <br />
-          <div>
-            <h1
-              class="title is-1"
+          <a
+            class="navbar-item nav-title"
+            href="/"
+            style="font-weight: bold;"
+          >
+            TestDriven.io
+          </a>
+          <span
+            class="nav-toggle navbar-burger"
+          >
+            <span />
+            <span />
+            <span />
+          </span>
+        </div>
+        <div
+          class="navbar-menu"
+        >
+          <div
+            class="navbar-start"
+          >
+            <a
+              class="navbar-item"
+              href="/about"
             >
-              Users
-            </h1>
-            <hr />
+              About
+            </a>
+            <a
+              class="navbar-item"
+              href="/status"
+            >
+              User Status
+            </a>
+          </div>
+          <div
+            class="navbar-end"
+          >
+            <a
+              class="navbar-item"
+              href="/register"
+            >
+              Register
+            </a>
+            <a
+              class="navbar-item"
+              href="/login"
+            >
+              Log In
+            </a>
+            <a
+              class="navbar-item"
+              href="/logout"
+            >
+              Log Out
+            </a>
+          </div>
+        </div>
+      </section>
+    </nav>
+    <section
+      class="section"
+    >
+      <div
+        class="container"
+      >
+        <div
+          class="columns"
+        >
+          <div
+            class="column is-half"
+          >
             <br />
-            <form>
-              <div
-                class="field"
+            <div>
+              <h1
+                class="title is-1"
               >
-                <label
-                  class="label is-large"
-                  for="input-username"
+                Users
+              </h1>
+              <hr />
+              <br />
+              <form>
+                <div
+                  class="field"
                 >
-                  Username
-                </label>
-                <input
-                  class="input is-large"
-                  id="input-username"
-                  name="username"
-                  placeholder="Enter a username"
-                  required=""
-                  type="text"
-                  value=""
-                />
-              </div>
-              <div
-                class="field"
-              >
-                <label
-                  class="label is-large"
-                  for="input-email"
+                  <label
+                    class="label is-large"
+                    for="input-username"
+                  >
+                    Username
+                  </label>
+                  <input
+                    class="input is-large"
+                    id="input-username"
+                    name="username"
+                    placeholder="Enter a username"
+                    required=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+                <div
+                  class="field"
                 >
-                  Email
-                </label>
+                  <label
+                    class="label is-large"
+                    for="input-email"
+                  >
+                    Email
+                  </label>
+                  <input
+                    class="input is-large"
+                    id="input-email"
+                    name="email"
+                    placeholder="Enter an email address"
+                    required=""
+                    type="email"
+                    value=""
+                  />
+                </div>
                 <input
-                  class="input is-large"
-                  id="input-email"
-                  name="email"
-                  placeholder="Enter an email address"
-                  required=""
-                  type="email"
-                  value=""
+                  class="button is-primary is-large is-fullwidth"
+                  type="submit"
+                  value="Submit"
                 />
-              </div>
-              <input
-                class="button is-primary is-large is-fullwidth"
-                type="submit"
-                value="Submit"
-              />
-            </form>
-            <br />
-            <br />
-            <div />
+              </form>
+              <br />
+              <br />
+              <div />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </DocumentFragment>
 `;
