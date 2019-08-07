@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <div>
+    <h1
+      class="title is-1"
+    >
+      About
+    </h1>
+    <hr />
+    <br />
+    <p
+      class="content"
+    >
+      Add something relevant here.
+    </p>
+  </div>
+</DocumentFragment>
+`;
