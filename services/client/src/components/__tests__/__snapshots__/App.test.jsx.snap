@@ -37,15 +37,10 @@ exports[`renders 1`] = `
           >
             <a
               class="navbar-item"
+              data-testid="nav-about"
               href="/about"
             >
               About
-            </a>
-            <a
-              class="navbar-item"
-              href="/status"
-            >
-              User Status
             </a>
           </div>
           <div
@@ -53,21 +48,18 @@ exports[`renders 1`] = `
           >
             <a
               class="navbar-item"
+              data-testid="nav-register"
               href="/register"
             >
               Register
             </a>
             <a
               class="navbar-item"
+              data-testid="nav-login"
               href="/login"
             >
               Log In
             </a>
-            <span
-              class="navbar-item link"
-            >
-              Log Out
-            </span>
           </div>
         </div>
       </section>
