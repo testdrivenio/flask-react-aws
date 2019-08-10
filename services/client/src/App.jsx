@@ -9,19 +9,23 @@ import NavBar from "./components/NavBar";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import UserStatus from "./components/UserStatus";
+import Message from "./components/Message";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
-      title: "TestDriven.io"
+      title: "TestDriven.io",
+      messageType: null,
+      messageText: null
     };
     this.addUser = this.addUser.bind(this);
     this.handleRegisterFormSubmit = this.handleRegisterFormSubmit.bind(this);
     this.handleLoginFormSubmit = this.handleLoginFormSubmit.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
+    this.removeMessage = this.removeMessage.bind(this); // new
   }
   componentDidMount() {
     this.getUsers();
@@ -42,9 +46,11 @@ class App extends Component {
       .then(res => {
         this.getUsers();
         this.setState({ username: "", email: "" });
+        this.createMessage("success", "User added.");
       })
       .catch(err => {
         console.log(err);
+        this.createMessage("danger", "That user already exists.");
       });
   }
   handleRegisterFormSubmit(data) {
@@ -56,12 +62,14 @@ class App extends Component {
         setTimeout(
           function() {
             this.getUsers();
+            this.createMessage("success", "You have registered successfully.");
           }.bind(this),
           300
         );
       })
       .catch(err => {
         console.log(err);
+        this.createMessage("danger", "That user already exists.");
       });
   }
   handleLoginFormSubmit(data) {
@@ -73,12 +81,15 @@ class App extends Component {
         setTimeout(
           function() {
             this.getUsers();
+
+            this.createMessage("success", "You have logged in successfully.");
           }.bind(this),
           300
         );
       })
       .catch(err => {
         console.log(err);
+        this.createMessage("danger", "Incorrect email and/or password.");
       });
   }
   isAuthenticated() {
@@ -106,6 +117,22 @@ class App extends Component {
   logoutUser() {
     window.localStorage.removeItem("authToken");
     this.forceUpdate();
+    this.createMessage("success", "You have logged out.");
+  }
+  createMessage(type, text) {
+    this.setState({
+      messageType: type,
+      messageText: text
+    });
+    setTimeout(() => {
+      this.removeMessage();
+    }, 3000);
+  }
+  removeMessage() {
+    this.setState({
+      messageType: null,
+      messageText: null
+    });
   }
   render() {
     return (
@@ -117,6 +144,13 @@ class App extends Component {
         />
         <section className="section">
           <div className="container">
+            {this.state.messageType && this.state.messageText && (
+              <Message
+                messageType={this.state.messageType}
+                messageText={this.state.messageText}
+                removeMessage={this.removeMessage}
+              />
+            )}
             <div className="columns">
               <div className="column is-half">
                 <br />
