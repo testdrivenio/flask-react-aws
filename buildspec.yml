@@ -20,7 +20,7 @@ phases:
       - docker-compose exec -T users pytest "project/tests" -p no:warnings --cov="project"
       - docker-compose exec -T users flake8 project
       - docker-compose exec -T users black project --check
-      - docker-compose exec -T users /bin/bash -c "isort project/*/*.py" --check-only
+      - docker-compose exec -T users /bin/sh -c "isort project/*/*.py" --check-only
       - docker-compose exec -T client npm run lint
       - docker-compose exec -T client npm run prettier:check
       - docker-compose exec -T client npm run prettier:write
