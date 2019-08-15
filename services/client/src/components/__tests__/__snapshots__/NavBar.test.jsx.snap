@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when authenticated renders 1`] = `
+<DocumentFragment>
+  <nav
+    aria-label="main navigation"
+    class="navbar is-dark"
+    role="navigation"
+  >
+    <section
+      class="container"
+    >
+      <div
+        class="navbar-brand"
+      >
+        <a
+          class="navbar-item nav-title"
+          href="/"
+          style="font-weight: bold;"
+        >
+          Hello, World!
+        </a>
+        <span
+          class="nav-toggle navbar-burger"
+        >
+          <span />
+          <span />
+          <span />
+        </span>
+      </div>
+      <div
+        class="navbar-menu"
+      >
+        <div
+          class="navbar-start"
+        >
+          <a
+            class="navbar-item"
+            data-testid="nav-about"
+            href="/about"
+          >
+            About
+          </a>
+          <a
+            class="navbar-item"
+            data-testid="nav-status"
+            href="/status"
+          >
+            User Status
+          </a>
+        </div>
+        <div
+          class="navbar-end"
+        >
+          <span
+            class="navbar-item link"
+            data-testid="nav-logout"
+          >
+            Log Out
+          </span>
+        </div>
+      </div>
+    </section>
+  </nav>
+</DocumentFragment>
+`;
+
+exports[`when unauthenticated renders 1`] = `
+<DocumentFragment>
+  <nav
+    aria-label="main navigation"
+    class="navbar is-dark"
+    role="navigation"
+  >
+    <section
+      class="container"
+    >
+      <div
+        class="navbar-brand"
+      >
+        <a
+          class="navbar-item nav-title"
+          href="/"
+          style="font-weight: bold;"
+        >
+          Hello, World!
+        </a>
+        <span
+          class="nav-toggle navbar-burger"
+        >
+          <span />
+          <span />
+          <span />
+        </span>
+      </div>
+      <div
+        class="navbar-menu"
+      >
+        <div
+          class="navbar-start"
+        >
+          <a
+            class="navbar-item"
+            data-testid="nav-about"
+            href="/about"
+          >
+            About
+          </a>
+        </div>
+        <div
+          class="navbar-end"
+        >
+          <a
+            class="navbar-item"
+            data-testid="nav-register"
+            href="/register"
+          >
+            Register
+          </a>
+          <a
+            class="navbar-item"
+            data-testid="nav-login"
+            href="/login"
+          >
+            Log In
+          </a>
+        </div>
+      </div>
+    </section>
+  </nav>
+</DocumentFragment>
+`;
