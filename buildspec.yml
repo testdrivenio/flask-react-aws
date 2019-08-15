@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-west-1"
-    REACT_APP_USERS_SERVICE_URL: "http://localhost:5001"
+    REACT_APP_USERS_SERVICE_URL: "http://flask-react-alb-2034508701.us-west-1.elb.amazonaws.com"
 
 phases:
   install:
