@@ -1,0 +1,21 @@
+version: 0.2
+
+env:
+  variables:
+    REACT_APP_USERS_SERVICE_URL: "http://localhost:5001"
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  build:
+    commands:
+      - echo building and testing dev images...
+      - docker-compose up -d --build
+      - docker-compose exec -T users pytest "project/tests" -p no:warnings --cov="project"
+      - docker-compose exec -T users flake8 project
+      - docker-compose exec -T users black project --check
+      - docker-compose exec -T users /bin/bash -c "isort project/*/*.py" --check-only
+      - docker-compose exec -T client npm run lint
+      - docker-compose exec -T client npm run prettier:check
+      - docker-compose exec -T client npm run prettier:write
