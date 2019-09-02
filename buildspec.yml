@@ -7,7 +7,12 @@ env:
     REACT_APP_USERS_SERVICE_URL: "flask-react-alb-288140227.us-west-1.elb.amazonaws.com"
 
 phases:
+phases:
   install:
+    commands:
+      - echo Installing codebuild-extras...
+      - curl -fsSL https://raw.githubusercontent.com/thii/aws-codebuild-extras/master/install >> extras.sh
+      - . ./extras.sh
     runtime-versions:
       docker: 18
   pre_build:
