@@ -10,14 +10,12 @@ phases:
   install:
     runtime-versions:
       docker: 18
-    commands:
-    - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
   pre_build:
     commands:
       - echo logging in to ecr...
       - $(aws ecr get-login --no-include-email --region $AWS_REGION)
       - |
-        if expr "$CODEBUILD_WEBHOOK_BASE_REF" == "refs/heads/master" >/dev/null  && expr "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" >/dev/null; then
+        if expr "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" >/dev/null  && expr "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" >/dev/null; then
           DOCKER_TAG=prod
         else
           DOCKER_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
