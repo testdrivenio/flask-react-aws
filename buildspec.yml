@@ -14,6 +14,7 @@ phases:
       - echo $CODEBUILD_WEBHOOK_BASE_REF
       - echo $CODEBUILD_WEBHOOK_HEAD_REF
       - echo $CODEBUILD_WEBHOOK_TRIGGER
+      - echo $CODEBUILD_WEBHOOK_EVENT
   pre_build:
     commands:
       - echo logging in to ecr...
