@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`when "messageType" is "danger" renders 1`] = `
+<DocumentFragment>
+  <section
+    data-testid="message"
+  >
+    <div
+      class="notification is-danger"
+    >
+      <button
+        class="delete"
+      />
+      <span
+        class="message-text"
+      >
+        Hello, World!
+      </span>
+    </div>
+  </section>
+</DocumentFragment>
+`;
+
+exports[`when "messageType" is "success" renders 1`] = `
+<DocumentFragment>
+  <section
+    data-testid="message"
+  >
+    <div
+      class="notification is-success"
+    >
+      <button
+        class="delete"
+      />
+      <span
+        class="message-text"
+      >
+        Hello, World!
+      </span>
+    </div>
+  </section>
+</DocumentFragment>
+`;
