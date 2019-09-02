@@ -54,8 +54,8 @@ echo $CODEBUILD_WEBHOOK_HEAD_REF
 echo $CODEBUILD_WEBHOOK_TRIGGER
 echo $CODEBUILD_WEBHOOK_EVENT
 
-if  [ "$CODEBUILD_WEBHOOK_TRIGGER" == "refs/heads/master" ] && \
-    [ "$CODEBUILD_WEBHOOK_HEAD_REF" == "branch/master" ]
+if  [ "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" ] && \
+    [ "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" ]
 then
   echo "Updating ECS."
   configure_aws_cli
