@@ -10,7 +10,6 @@ def get_all_users():
 
 
 def get_user_by_id(user_id):
-    print(user_id)
     t = User.query.filter_by(id=user_id).first()
     return t
 
@@ -19,8 +18,8 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 
-def add_user(username, email):
-    user = User(username=username, email=email)
+def add_user(username, email, password):
+    user = User(username=username, email=email, password=password)
     db.session.add(user)
     db.session.commit()
     return user
