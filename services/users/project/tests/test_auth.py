@@ -12,7 +12,7 @@ def test_user_registration(test_app, test_database, add_user):
     resp = client.post(
         "/auth/register",
         data=json.dumps(
-            {"username": "justatest", "email": "test@test.com", "password": "123456",}
+            {"username": "justatest", "email": "test@test.com", "password": "123456"}
         ),
         content_type="application/json",
     )
