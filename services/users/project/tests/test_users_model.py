@@ -10,14 +10,14 @@ def test_passwords_are_random(test_app, test_database, add_user):
     assert user_one.password != user_two.password
 
 
-def test_encode_auth_token(test_app, test_database, add_user):
+def test_encode_token(test_app, test_database, add_user):
     user = add_user("justatest", "test@test.com", "test")
-    auth_token = user.encode_auth_token(user.id, "access")
-    assert isinstance(auth_token, bytes)
+    token = user.encode_token(user.id, "access")
+    assert isinstance(token, bytes)
 
 
-def test_decode_auth_token(test_app, test_database, add_user):
+def test_decode_token(test_app, test_database, add_user):
     user = add_user("justatest", "test@test.com", "test")
-    auth_token = user.encode_auth_token(user.id, "access")
-    assert isinstance(auth_token, bytes)
-    assert User.decode_auth_token(auth_token) == user.id
+    token = user.encode_token(user.id, "access")
+    assert isinstance(token, bytes)
+    assert User.decode_token(token) == user.id
