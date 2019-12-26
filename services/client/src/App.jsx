@@ -16,21 +16,15 @@ class App extends Component {
     this.state = {
       users: [],
       title: "TestDriven.io",
-      accessToken: null // new
+      accessToken: null
     };
-
-    this.addUser = this.addUser.bind(this);
-    this.handleRegisterFormSubmit = this.handleRegisterFormSubmit.bind(this);
-    this.handleLoginFormSubmit = this.handleLoginFormSubmit.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.logoutUser = this.logoutUser.bind(this);
   }
 
   componentDidMount() {
     this.getUsers();
   }
 
-  getUsers() {
+  getUsers = () => {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
       .then(res => {
@@ -41,7 +35,7 @@ class App extends Component {
       });
   }
 
-  addUser(data) {
+  addUser = (data) => {
     axios
       .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
       .then(res => {
@@ -53,7 +47,7 @@ class App extends Component {
       });
   }
 
-  handleRegisterFormSubmit(data) {
+  handleRegisterFormSubmit = (data) => {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
     axios
       .post(url, data)
@@ -65,7 +59,7 @@ class App extends Component {
       });
   }
 
-  handleLoginFormSubmit(data) {
+  handleLoginFormSubmit = (data) => {
     const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/login`;
     axios
       .post(url, data)
@@ -79,14 +73,14 @@ class App extends Component {
       });
   }
 
-  isAuthenticated() {
+  isAuthenticated = () => {
     if (this.state.accessToken || this.validRefresh()) {
       return true;
     }
     return false;
   }
 
-  validRefresh() {
+  validRefresh = () => {
     const token = window.localStorage.getItem("refreshToken");
     if (token) {
       axios
@@ -106,7 +100,7 @@ class App extends Component {
     return false;
   }
 
-  logoutUser() {
+  logoutUser = () => {
     window.localStorage.removeItem("refreshToken");
     this.setState({ accessToken: null });
   }
