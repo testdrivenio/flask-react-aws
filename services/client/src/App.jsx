@@ -1,15 +1,30 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Route, Switch } from "react-router-dom";
+import Modal from "react-modal";
 
 import UsersList from "./components/UsersList";
-import AddUser from "./components/AddUser";
 import About from "./components/About";
 import NavBar from "./components/NavBar";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import UserStatus from "./components/UserStatus";
 import Message from "./components/Message";
+import AddUser from "./components/AddUser";
+
+// new
+const modalStyles = {
+  content: {
+    top: "0",
+    left: "0",
+    right: "0",
+    bottom: "0",
+    border: 0,
+    background: "transparent"
+  }
+};
+
+Modal.setAppElement(document.getElementById("root"));
 
 class App extends Component {
   constructor() {
@@ -20,7 +35,8 @@ class App extends Component {
       title: "TestDriven.io",
       accessToken: null,
       messageType: null,
-      messageText: null
+      messageText: null,
+      showModal: false
     };
   }
 
@@ -45,11 +61,26 @@ class App extends Component {
       .then(res => {
         this.getUsers();
         this.setState({ username: "", email: "" });
+        this.handleCloseModal();
         this.createMessage("success", "User added.");
       })
       .catch(err => {
         console.log(err);
+        this.handleCloseModal();
         this.createMessage("danger", "That user already exists.");
+      });
+  };
+
+  removeUser = user_id => {
+    axios
+      .delete(`${process.env.REACT_APP_USERS_SERVICE_URL}/users/${user_id}`)
+      .then(res => {
+        this.getUsers();
+        this.createMessage("success", "User removed.");
+      })
+      .catch(err => {
+        console.log(err);
+        this.createMessage("danger", "Something went wrong.");
       });
   };
 
@@ -133,6 +164,14 @@ class App extends Component {
     });
   };
 
+  handleOpenModal = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     return (
       <div>
@@ -162,10 +201,42 @@ class App extends Component {
                         <h1 className="title is-1">Users</h1>
                         <hr />
                         <br />
-                        <AddUser addUser={this.addUser} />
+                        {this.isAuthenticated() && (
+                          <button
+                            onClick={this.handleOpenModal}
+                            className="button is-primary"
+                          >
+                            Add User
+                          </button>
+                        )}
                         <br />
                         <br />
-                        <UsersList users={this.state.users} />
+                        <Modal
+                          isOpen={this.state.showModal}
+                          style={modalStyles}
+                        >
+                          <div className="modal is-active">
+                            <div className="modal-background" />
+                            <div className="modal-card">
+                              <header className="modal-card-head">
+                                <p className="modal-card-title">Add User</p>
+                                <button
+                                  className="delete"
+                                  aria-label="close"
+                                  onClick={this.handleCloseModal}
+                                />
+                              </header>
+                              <section className="modal-card-body">
+                                <AddUser addUser={this.addUser} />
+                              </section>
+                            </div>
+                          </div>
+                        </Modal>
+                        <UsersList
+                          users={this.state.users}
+                          removeUser={this.removeUser}
+                          isAuthenticated={this.isAuthenticated}
+                        />
                       </div>
                     )}
                   />
