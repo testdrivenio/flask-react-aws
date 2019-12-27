@@ -112,7 +112,7 @@ class App extends Component {
 
   logoutUser = () => {
     window.localStorage.removeItem("refreshToken");
-    this.setState({ accessToken: null }
+    this.setState({ accessToken: null });
     this.createMessage("success", "You have logged out.");
   };
 
