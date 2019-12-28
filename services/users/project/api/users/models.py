@@ -1,5 +1,4 @@
-# project/api/models.py
-
+# services/users/project/api/models.py
 
 import os
 import datetime
@@ -29,44 +28,25 @@ class User(db.Model):
             password, current_app.config.get("BCRYPT_LOG_ROUNDS")
         ).decode()
 
-    def to_json(self):
-        return {
-            "id": self.id,
-            "username": self.username,
-            "email": self.email,
-            "active": self.active,
-        }
+    def encode_token(self, user_id, token_type):
+        if token_type == "access":
+            seconds = current_app.config.get("ACCESS_TOKEN_EXPIRATION")
+        else:
+            seconds = current_app.config.get("REFRESH_TOKEN_EXPIRATION")
 
-    def encode_auth_token(self, user_id):
-        """Generates the access token"""
-        try:
-            payload = {
-                "exp": datetime.datetime.utcnow()
-                + datetime.timedelta(
-                    days=current_app.config.get("TOKEN_EXPIRATION_DAYS"),
-                    seconds=current_app.config.get("TOKEN_EXPIRATION_SECONDS"),
-                ),
-                "iat": datetime.datetime.utcnow(),
-                "sub": user_id,
-            }
-            return jwt.encode(
-                payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
-            )
-        except Exception as e:
-            return e
+        payload = {
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds),
+            "iat": datetime.datetime.utcnow(),
+            "sub": user_id,
+        }
+        return jwt.encode(
+            payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
+        )
 
     @staticmethod
-    def decode_auth_token(auth_token):
-        """
-        Decodes the access token - :param auth_token: - :return: integer|string
-        """
-        try:
-            payload = jwt.decode(auth_token, current_app.config.get("SECRET_KEY"))
-            return payload["sub"]
-        except jwt.ExpiredSignatureError:
-            return "Signature expired. Please log in again."
-        except jwt.InvalidTokenError:
-            return "Invalid token. Please log in again."
+    def decode_token(token):
+        payload = jwt.decode(token, current_app.config.get("SECRET_KEY"))
+        return payload["sub"]
 
 
 if os.getenv("FLASK_ENV") == "development":

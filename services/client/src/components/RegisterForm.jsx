@@ -138,9 +138,9 @@ const RegisterForm = props => {
   );
 };
 
-export default RegisterForm;
-
 RegisterForm.propTypes = {
   handleRegisterFormSubmit: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.func.isRequired
 };
+
+export default RegisterForm;

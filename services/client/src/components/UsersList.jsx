@@ -10,8 +10,7 @@ const UsersList = props => {
             <th>ID</th>
             <th>Email</th>
             <th>Username</th>
-            <th>Active</th>
-            <th />
+            {props.isAuthenticated() && <th />}
           </tr>
         </thead>
         <tbody>
@@ -21,15 +20,16 @@ const UsersList = props => {
                 <td>{user.id}</td>
                 <td>{user.email}</td>
                 <td className="username">{user.username}</td>
-                <td>{String(user.active)}</td>
-                <td>
-                  <button
-                    className="button is-danger is-small"
-                    onClick={() => props.removeUser(user.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
+                {props.isAuthenticated() && (
+                  <td>
+                    <button
+                      className="button is-danger is-small"
+                      onClick={() => props.removeUser(user.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                )}
               </tr>
             );
           })}
@@ -41,7 +41,8 @@ const UsersList = props => {
 
 UsersList.propTypes = {
   users: PropTypes.array.isRequired,
-  removeUser: PropTypes.func.isRequired
+  removeUser: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.func.isRequired
 };
 
 export default UsersList;

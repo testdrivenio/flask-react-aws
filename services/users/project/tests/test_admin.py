@@ -1,10 +1,9 @@
-# project/tests/test_users.py
+# services/users/project/tests/test_admin.py
 
 
 import os
 
-from project import create_app
-from project.tests.utils import recreate_db
+from project import create_app, db
 
 
 def test_admin_view_dev():
@@ -13,7 +12,9 @@ def test_admin_view_dev():
     app = create_app()
     app.config.from_object("project.config.TestingConfig")
     with app.app_context():
-        recreate_db()
+        db.session.remove()
+        db.drop_all()
+        db.create_all()
         client = app.test_client()
         resp = client.get("/admin/user/")
         assert resp.status_code == 200
@@ -26,7 +27,9 @@ def test_admin_view_prod():
     app = create_app()
     app.config.from_object("project.config.TestingConfig")
     with app.app_context():
-        recreate_db()
+        db.session.remove()
+        db.drop_all()
+        db.create_all()
         client = app.test_client()
         resp = client.get("/admin/user/")
         assert resp.status_code == 404

@@ -1,113 +1,102 @@
-# project/api/users/views.py
+# services/users/project/api/users/views.py
 
 
-from flask import Blueprint, request
-from flask_restful import Api, Resource
-from sqlalchemy import exc
+from flask import request
+from flask_restplus import Resource, fields, Namespace
 
-from project import db
-from project.api.users.models import User
+from project.api.users.services import (
+    get_all_users,
+    get_user_by_email,
+    add_user,
+    get_user_by_id,
+    update_user,
+    delete_user,
+)
 
-users_blueprint = Blueprint("users", __name__)
-api = Api(users_blueprint)
+
+users_namespace = Namespace("users")
+
+user = users_namespace.model(
+    "User",
+    {
+        "id": fields.Integer(readOnly=True),
+        "username": fields.String(required=True),
+        "email": fields.String(required=True),
+        "created_date": fields.DateTime,
+    },
+)
+
+user_post = users_namespace.inherit(
+    "User post", user, {"password": fields.String(required=True)}
+)
 
 
 class UsersList(Resource):
+    @users_namespace.marshal_with(user, as_list=True)
     def get(self):
-        response_object = {
-            "status": "success",
-            "data": {"users": [user.to_json() for user in User.query.all()]},
-        }
-        return response_object, 200
+        """Returns all users."""
+        return get_all_users(), 200
 
+    @users_namespace.expect(user_post, validate=True)
+    @users_namespace.response(201, "<user_email> was added!")
+    @users_namespace.response(400, "Sorry. That email already exists.")
     def post(self):
+        """Creates a new user."""
         post_data = request.get_json()
-        response_object = {"status": "fail", "message": "Invalid payload."}
-        if not post_data:
-            return response_object, 400
         username = post_data.get("username")
         email = post_data.get("email")
         password = post_data.get("password")
-        try:
-            user = User.query.filter_by(email=email).first()
-            if not user:
-                db.session.add(User(username=username, email=email, password=password))
-                db.session.commit()
-                response_object["status"] = "success"
-                response_object["message"] = f"{email} was added!"
-                return response_object, 201
-            else:
-                response_object["message"] = "Sorry. That email already exists."
-                return response_object, 400
-        except exc.IntegrityError:
-            db.session.rollback()
+        response_object = {}
+
+        user = get_user_by_email(email)
+        if user:
+            response_object["message"] = "Sorry. That email already exists."
             return response_object, 400
-        except (exc.IntegrityError, ValueError):
-            db.session.rollback()
-            return response_object, 400
+        add_user(username, email, password)
+        response_object["message"] = f"{email} was added!"
+        return response_object, 201
 
 
 class Users(Resource):
+    @users_namespace.marshal_with(user)
+    @users_namespace.response(200, "Success")
+    @users_namespace.response(404, "User <user_id> does not exist")
     def get(self, user_id):
-        response_object = {"status": "fail", "message": "User does not exist"}
-        try:
-            user = User.query.filter_by(id=int(user_id)).first()
-            if not user:
-                return response_object, 404
-            else:
-                response_object = {
-                    "status": "success",
-                    "data": {
-                        "id": user.id,
-                        "username": user.username,
-                        "email": user.email,
-                        "active": user.active,
-                    },
-                }
-                return response_object, 200
-        except ValueError:
-            return response_object, 404
+        """Returns a single user."""
+        user = get_user_by_id(user_id)
+        if not user:
+            users_namespace.abort(404, f"User {user_id} does not exist")
+        return user, 200
 
+    @users_namespace.expect(user, validate=True)
+    @users_namespace.response(200, "<user_is> was updated!")
+    @users_namespace.response(404, "User <user_id> does not exist")
     def put(self, user_id):
+        """Updates a user."""
         post_data = request.get_json()
-        response_object = {"status": "fail", "message": "Invalid payload."}
-        if not post_data:
-            return response_object, 400
         username = post_data.get("username")
         email = post_data.get("email")
-        if not username or not email:
-            return response_object, 400
-        try:
-            user = User.query.filter_by(id=int(user_id)).first()
-            if user:
-                user.username = username
-                user.email = email
-                db.session.commit()
-                response_object["status"] = "success"
-                response_object["message"] = f"{user.id} was updated!"
-                return response_object, 200
-            else:
-                response_object["message"] = "User does not exist."
-                return response_object, 404
-        except exc.IntegrityError:
-            db.session.rollback()
-            return response_object, 400
+        response_object = {}
 
+        user = get_user_by_id(user_id)
+        if not user:
+            users_namespace.abort(404, f"User {user_id} does not exist")
+        update_user(user, username, email)
+        response_object["message"] = f"{user.id} was updated!"
+        return response_object, 200
+
+    @users_namespace.response(200, "<user_is> was removed!")
+    @users_namespace.response(404, "User <user_id> does not exist")
     def delete(self, user_id):
-        response_object = {"status": "fail", "message": "User does not exist"}
-        try:
-            user = User.query.filter_by(id=int(user_id)).first()
-            if not user:
-                return response_object, 404
-            else:
-                db.session.delete(user)
-                db.session.commit()
-                response_object["status"] = "success"
-                response_object["message"] = f"{user.email} was removed!"
-                return response_object, 200
-        except ValueError:
-            return response_object, 404
+        """Updates a user."""
+        response_object = {}
+        user = get_user_by_id(user_id)
+        if not user:
+            users_namespace.abort(404, f"User {user_id} does not exist")
+        delete_user(user)
+        response_object["message"] = f"{user.email} was removed!"
+        return response_object, 200
 
 
-api.add_resource(UsersList, "/users")
-api.add_resource(Users, "/users/<user_id>")
+users_namespace.add_resource(UsersList, "")
+users_namespace.add_resource(Users, "/<int:user_id>")

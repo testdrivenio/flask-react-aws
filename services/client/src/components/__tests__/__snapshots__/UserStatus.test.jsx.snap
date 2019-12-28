@@ -6,17 +6,6 @@ exports[`renders 1`] = `
     <ul>
       <li>
         <strong>
-          User ID:
-        </strong>
-         
-        <span
-          data-testid="user-id"
-        >
-          1
-        </span>
-      </li>
-      <li>
-        <strong>
           Email:
         </strong>
          

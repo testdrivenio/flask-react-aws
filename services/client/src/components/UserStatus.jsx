@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 
 class UserStatus extends Component {
@@ -7,7 +8,6 @@ class UserStatus extends Component {
     super(props);
     this.state = {
       email: "",
-      id: "",
       username: ""
     };
   }
@@ -20,15 +20,14 @@ class UserStatus extends Component {
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.localStorage.authToken}`
+        Authorization: `Bearer ${this.props.accessToken}`
       }
     };
     return axios(options)
       .then(res => {
         this.setState({
-          email: res.data.data.email,
-          id: res.data.data.id,
-          username: res.data.data.username
+          email: res.data.email,
+          username: res.data.username
         });
       })
       .catch(error => {
@@ -43,10 +42,6 @@ class UserStatus extends Component {
       <div>
         <ul>
           <li>
-            <strong>User ID:</strong>&nbsp;
-            <span data-testid="user-id">{this.state.id}</span>
-          </li>
-          <li>
             <strong>Email:</strong>&nbsp;
             <span data-testid="user-email">{this.state.email}</span>
           </li>
@@ -59,5 +54,10 @@ class UserStatus extends Component {
     );
   }
 }
+
+UserStatus.propTypes = {
+  accessToken: PropTypes.string,
+  isAuthenticated: PropTypes.func.isRequired
+};
 
 export default UserStatus;

@@ -39,6 +39,7 @@ const NavBar = props => {
         </div>
         <div className="navbar-end">
           <span
+            // eslint-disable-next-line react/jsx-handler-names
             onClick={props.logoutUser}
             className="navbar-item link"
             data-testid="nav-logout"

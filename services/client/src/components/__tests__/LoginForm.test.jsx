@@ -1,40 +1,33 @@
-import React from "react";
-import { cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import React from 'react';
+import { cleanup } from '@testing-library/react';
 
-import LoginForm from "../LoginForm";
+import LoginForm from '../LoginForm';
 
 afterEach(cleanup);
 
 const props = {
-  handleLoginFormSubmit: () => {
-    return true;
-  },
-  isAuthenticated: () => {
-    return false;
-  }
-};
+  handleLoginFormSubmit: () => { return true },
+  isAuthenticated: () => { return false },
+}
 
-it("renders properly", () => {
+it('renders properly', () => {
   const { getByText } = renderWithRouter(<LoginForm {...props} />);
-  expect(getByText("Log In")).toHaveClass("title");
+  expect(getByText('Log In')).toHaveClass('title');
 });
 
-it("renders with default props", () => {
-  const { getByLabelText, getByText } = renderWithRouter(
-    <LoginForm {...props} />
-  );
+it('renders with default props', () => {
+  const { getByLabelText, getByText } = renderWithRouter(<LoginForm {...props} />);
 
-  const emailInput = getByLabelText("Email");
-  expect(emailInput).toHaveAttribute("type", "email");
+  const emailInput = getByLabelText('Email');
+  expect(emailInput).toHaveAttribute('type', 'email');
   expect(emailInput).not.toHaveValue();
 
-  const passwordInput = getByLabelText("Password");
-  expect(passwordInput).toHaveAttribute("type", "password");
+  const passwordInput = getByLabelText('Password');
+  expect(passwordInput).toHaveAttribute('type', 'password');
   expect(passwordInput).not.toHaveValue();
 
-  const buttonInput = getByText("Submit");
-  expect(buttonInput).toHaveValue("Submit");
+  const buttonInput = getByText('Submit');
+  expect(buttonInput).toHaveValue('Submit');
 });
 
 it("renders", () => {
