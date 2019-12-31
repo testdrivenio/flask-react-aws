@@ -12,6 +12,7 @@ import UserStatus from "./components/UserStatus";
 import Message from "./components/Message";
 import AddUser from "./components/AddUser";
 
+// new
 const modalStyles = {
   content: {
     top: "0",
@@ -28,37 +29,33 @@ Modal.setAppElement(document.getElementById("root"));
 class App extends Component {
   constructor() {
     super();
+
     this.state = {
       users: [],
       title: "TestDriven.io",
+      accessToken: null,
       messageType: null,
       messageText: null,
       showModal: false
     };
-    this.addUser = this.addUser.bind(this);
-    this.handleRegisterFormSubmit = this.handleRegisterFormSubmit.bind(this);
-    this.handleLoginFormSubmit = this.handleLoginFormSubmit.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.logoutUser = this.logoutUser.bind(this);
-    this.removeMessage = this.removeMessage.bind(this);
-    this.handleOpenModal = this.handleOpenModal.bind(this);
-    this.handleCloseModal = this.handleCloseModal.bind(this);
-    this.removeUser = this.removeUser.bind(this);
   }
+
   componentDidMount() {
     this.getUsers();
   }
-  getUsers() {
+
+  getUsers = () => {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
       .then(res => {
-        this.setState({ users: res.data.data.users });
+        this.setState({ users: res.data });
       })
       .catch(err => {
         console.log(err);
       });
-  }
-  addUser(data) {
+  };
+
+  addUser = data => {
     axios
       .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
       .then(res => {
@@ -72,95 +69,9 @@ class App extends Component {
         this.handleCloseModal();
         this.createMessage("danger", "That user already exists.");
       });
-  }
-  handleRegisterFormSubmit(data) {
-    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
-    axios
-      .post(url, data)
-      .then(res => {
-        window.localStorage.setItem("authToken", res.data.auth_token);
-        setTimeout(
-          function() {
-            this.getUsers();
-            this.createMessage("success", "You have registered successfully.");
-          }.bind(this),
-          300
-        );
-      })
-      .catch(err => {
-        console.log(err);
-        this.createMessage("danger", "That user already exists.");
-      });
-  }
-  handleLoginFormSubmit(data) {
-    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/login`;
-    axios
-      .post(url, data)
-      .then(res => {
-        window.localStorage.setItem("authToken", res.data.auth_token);
-        setTimeout(
-          function() {
-            this.getUsers();
+  };
 
-            this.createMessage("success", "You have logged in successfully.");
-          }.bind(this),
-          300
-        );
-      })
-      .catch(err => {
-        console.log(err);
-        this.createMessage("danger", "Incorrect email and/or password.");
-      });
-  }
-  isAuthenticated() {
-    const token = window.localStorage.getItem("authToken");
-    if (token) {
-      const options = {
-        url: `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/status`,
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
-      };
-      return axios(options)
-        .then(res => {
-          return true;
-        })
-        .catch(err => {
-          this.logoutUser();
-          return false;
-        });
-    }
-    return false;
-  }
-  logoutUser() {
-    window.localStorage.removeItem("authToken");
-    this.forceUpdate();
-    this.createMessage("success", "You have logged out.");
-  }
-  createMessage(type, text) {
-    this.setState({
-      messageType: type,
-      messageText: text
-    });
-    setTimeout(() => {
-      this.removeMessage();
-    }, 3000);
-  }
-  removeMessage() {
-    this.setState({
-      messageType: null,
-      messageText: null
-    });
-  }
-  handleOpenModal() {
-    this.setState({ showModal: true });
-  }
-  handleCloseModal() {
-    this.setState({ showModal: false });
-  }
-  removeUser(user_id) {
+  removeUser = user_id => {
     axios
       .delete(`${process.env.REACT_APP_USERS_SERVICE_URL}/users/${user_id}`)
       .then(res => {
@@ -171,7 +82,96 @@ class App extends Component {
         console.log(err);
         this.createMessage("danger", "Something went wrong.");
       });
-  }
+  };
+
+  handleRegisterFormSubmit = data => {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/register`;
+    axios
+      .post(url, data)
+      .then(res => {
+        console.log(res.data);
+        this.createMessage("success", "You have registered successfully.");
+      })
+      .catch(err => {
+        console.log(err);
+        this.createMessage("danger", "That user already exists.");
+      });
+  };
+
+  handleLoginFormSubmit = data => {
+    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/login`;
+    axios
+      .post(url, data)
+      .then(res => {
+        this.setState({ accessToken: res.data.access_token });
+        this.getUsers();
+        window.localStorage.setItem("refreshToken", res.data.refresh_token);
+        this.createMessage("success", "You have logged in successfully.");
+      })
+      .catch(err => {
+        console.log(err);
+        this.createMessage("danger", "Incorrect email and/or password.");
+      });
+  };
+
+  isAuthenticated = () => {
+    if (this.state.accessToken || this.validRefresh()) {
+      return true;
+    }
+    return false;
+  };
+
+  validRefresh = () => {
+    const token = window.localStorage.getItem("refreshToken");
+    if (token) {
+      axios
+        .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/auth/refresh`, {
+          refresh_token: token
+        })
+        .then(res => {
+          this.setState({ accessToken: res.data.access_token });
+          this.getUsers();
+          window.localStorage.setItem("refreshToken", res.data.refresh_token);
+          return true;
+        })
+        .catch(err => {
+          return false;
+        });
+    }
+    return false;
+  };
+
+  logoutUser = () => {
+    window.localStorage.removeItem("refreshToken");
+    this.setState({ accessToken: null });
+    this.createMessage("success", "You have logged out.");
+  };
+
+  createMessage = (type, text) => {
+    this.setState({
+      messageType: type,
+      messageText: text
+    });
+    setTimeout(() => {
+      this.removeMessage();
+    }, 3000);
+  };
+
+  removeMessage = () => {
+    this.setState({
+      messageType: null,
+      messageText: null
+    });
+  };
+
+  handleOpenModal = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     return (
       <div>
@@ -201,12 +201,14 @@ class App extends Component {
                         <h1 className="title is-1">Users</h1>
                         <hr />
                         <br />
-                        <button
-                          onClick={this.handleOpenModal}
-                          className="button is-primary"
-                        >
-                          Add User
-                        </button>
+                        {this.isAuthenticated() && (
+                          <button
+                            onClick={this.handleOpenModal}
+                            className="button is-primary"
+                          >
+                            Add User
+                          </button>
+                        )}
                         <br />
                         <br />
                         <Modal
@@ -233,6 +235,7 @@ class App extends Component {
                         <UsersList
                           users={this.state.users}
                           removeUser={this.removeUser}
+                          isAuthenticated={this.isAuthenticated}
                         />
                       </div>
                     )}
@@ -243,6 +246,7 @@ class App extends Component {
                     path="/register"
                     render={() => (
                       <RegisterForm
+                        // eslint-disable-next-line react/jsx-handler-names
                         handleRegisterFormSubmit={this.handleRegisterFormSubmit}
                         isAuthenticated={this.isAuthenticated}
                       />
@@ -253,6 +257,7 @@ class App extends Component {
                     path="/login"
                     render={() => (
                       <LoginForm
+                        // eslint-disable-next-line react/jsx-handler-names
                         handleLoginFormSubmit={this.handleLoginFormSubmit}
                         isAuthenticated={this.isAuthenticated}
                       />
@@ -262,7 +267,10 @@ class App extends Component {
                     exact
                     path="/status"
                     render={() => (
-                      <UserStatus isAuthenticated={this.isAuthenticated} />
+                      <UserStatus
+                        accessToken={this.state.accessToken}
+                        isAuthenticated={this.isAuthenticated}
+                      />
                     )}
                   />
                 </Switch>

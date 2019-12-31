@@ -100,9 +100,9 @@ const LoginForm = props => {
   );
 };
 
-export default LoginForm;
-
 LoginForm.propTypes = {
   handleLoginFormSubmit: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.func.isRequired
 };
+
+export default LoginForm;

@@ -85,11 +85,6 @@ exports[`renders 1`] = `
               </h1>
               <hr />
               <br />
-              <button
-                class="button is-primary"
-              >
-                Add User
-              </button>
               <br />
               <br />
               <div>
@@ -107,10 +102,6 @@ exports[`renders 1`] = `
                       <th>
                         Username
                       </th>
-                      <th>
-                        Active
-                      </th>
-                      <th />
                     </tr>
                   </thead>
                   <tbody />

@@ -28,21 +28,15 @@ def create_app(script_info=None):
 
     # set up extensions
     db.init_app(app)
-    cors.init_app(app)
+    cors.init_app(app, resources={r"*": {"origins": "*"}})
     bcrypt.init_app(app)
     if os.getenv("FLASK_ENV") == "development":
         admin.init_app(app)
 
-    # register blueprints
-    from project.api.ping import ping_blueprint
+    # register api
+    from project.api import api
 
-    app.register_blueprint(ping_blueprint)
-    from project.api.users.views import users_blueprint
-
-    app.register_blueprint(users_blueprint)
-    from project.api.auth import auth_blueprint
-
-    app.register_blueprint(auth_blueprint)
+    api.init_app(app)
 
     # shell context for flask cli
     @app.shell_context_processor

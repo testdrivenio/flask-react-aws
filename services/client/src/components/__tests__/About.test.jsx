@@ -1,14 +1,13 @@
-import React from "react";
-import { render, cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+import React from 'react';
+import { render, cleanup } from '@testing-library/react';
 
-import About from "../About";
+import About from '../About';
 
 afterEach(cleanup);
 
-it("renders properly", () => {
+it('renders properly', () => {
   const { getByText } = render(<About />);
-  expect(getByText("Add something relevant here.")).toHaveClass("content");
+  expect(getByText('Add something relevant here.')).toHaveClass('content');
 });
 
 it("renders", () => {

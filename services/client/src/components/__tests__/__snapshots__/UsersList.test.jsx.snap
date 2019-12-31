@@ -17,8 +17,57 @@ exports[`renders 1`] = `
           <th>
             Username
           </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            1
+          </td>
+          <td>
+            hermanmu@gmail.com
+          </td>
+          <td
+            class="username"
+          >
+            michael
+          </td>
+        </tr>
+        <tr>
+          <td>
+            2
+          </td>
+          <td>
+            michael@mherman.org
+          </td>
+          <td
+            class="username"
+          >
+            michaelherman
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`renders when authenticated 1`] = `
+<DocumentFragment>
+  <div>
+    <table
+      class="table is-hoverable is-fullwidth"
+    >
+      <thead>
+        <tr>
           <th>
-            Active
+            ID
+          </th>
+          <th>
+            Email
+          </th>
+          <th>
+            Username
           </th>
           <th />
         </tr>
@@ -35,9 +84,6 @@ exports[`renders 1`] = `
             class="username"
           >
             michael
-          </td>
-          <td>
-            true
           </td>
           <td>
             <button
@@ -58,9 +104,6 @@ exports[`renders 1`] = `
             class="username"
           >
             michaelherman
-          </td>
-          <td>
-            true
           </td>
           <td>
             <button

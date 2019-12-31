@@ -70,7 +70,7 @@ const AddUser = props => (
               name="email"
               id="input-email"
               className={
-                errors.username && touched.username ? "input error" : "input"
+                errors.email && touched.email ? "input error" : "input"
               }
               type="email"
               placeholder="Enter an email address"
@@ -90,7 +90,7 @@ const AddUser = props => (
               name="password"
               id="input-password"
               className={
-                errors.username && touched.username ? "input error" : "input"
+                errors.password && touched.password ? "input error" : "input"
               }
               type="password"
               placeholder="Enter a password"
