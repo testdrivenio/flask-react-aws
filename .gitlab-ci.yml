@@ -1,4 +1,4 @@
-mage: docker:stable
+image: docker:stable
 
 stages:
   - build
@@ -48,15 +48,17 @@ test:users:
   variables:
     POSTGRES_DB: users
     POSTGRES_USER: runner
-    POSTGRES_PASSWORD: ""
-    DATABASE_TEST_URL: postgres://runner@postgres:5432/users
+    POSTGRES_PASSWORD: runner
+    DATABASE_TEST_URL: postgres://runner:runner@postgres:5432/users
     FLASK_ENV: development
   script:
     - cd /usr/src/app
-    - pytest "project/tests" -p no:warnings
-    - flake8 project
-    - black project --check
-    - isort project/**/*.py --check-only
+    - pip install -r requirements-dev.txt
+    - python -m pytest "project/tests" -p no:warnings
+    - python -m flake8 project
+    - python -m black project --check
+    - python -m isort project/**/*.py --check-only
+
 
 test:client:
   stage: test
