@@ -1,4 +1,4 @@
-# services/users/project/tests/test_ping.py
+# services/project/tests/test_ping.py
 
 
 import json

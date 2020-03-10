@@ -1,4 +1,4 @@
-# services/users/project/tests/conftest.py
+# services/project/tests/conftest.py
 
 
 import pytest
@@ -23,10 +23,10 @@ def test_database():
     db.drop_all()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def add_user():
-    def _add_user(username, email, password):
-        user = User(username=username, email=email, password=password)
+    def _add_user(username, email):
+        user = User(username=username, email=email)
         db.session.add(user)
         db.session.commit()
         return user
