@@ -1,4 +1,4 @@
-# services/services/project/api/users/views.py
+# services/users/project/api/users/views.py
 
 
 from flask import request
@@ -26,6 +26,10 @@ user = users_namespace.model(
     },
 )
 
+user_post = users_namespace.inherit(
+    "User post", user, {"password": fields.String(required=True)}
+)
+
 
 class UsersList(Resource):
     @users_namespace.marshal_with(user, as_list=True)
@@ -33,7 +37,7 @@ class UsersList(Resource):
         """Returns all users."""
         return get_all_users(), 200
 
-    @users_namespace.expect(user, validate=True)
+    @users_namespace.expect(user_post, validate=True)
     @users_namespace.response(201, "<user_email> was added!")
     @users_namespace.response(400, "Sorry. That email already exists.")
     def post(self):
@@ -41,13 +45,14 @@ class UsersList(Resource):
         post_data = request.get_json()
         username = post_data.get("username")
         email = post_data.get("email")
+        password = post_data.get("password")
         response_object = {}
 
         user = get_user_by_email(email)
         if user:
             response_object["message"] = "Sorry. That email already exists."
             return response_object, 400
-        add_user(username, email)
+        add_user(username, email, password)
         response_object["message"] = f"{email} was added!"
         return response_object, 201
 

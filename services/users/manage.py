@@ -1,4 +1,4 @@
-# services/manage.py
+# services/users/manage.py
 
 
 import sys

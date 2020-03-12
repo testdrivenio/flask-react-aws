@@ -7,9 +7,9 @@ FROM python:3.8.1-alpine as builder
 
 # install dependencies
 RUN apk update && \
-    apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add postgresql-dev && \
-    apk add netcat-openbsd
+    apk add --no-cache --virtual build-deps \
+    openssl-dev libffi-dev gcc python3-dev musl-dev \
+    postgresql-dev netcat-openbsd
 
 # set work directory
 WORKDIR /usr/src/app
@@ -49,9 +49,10 @@ ENV APP_SETTINGS project.config.ProductionConfig
 ARG SECRET_KEY
 ENV SECRET_KEY $SECRET_KEY
 
-# install psycopg2 dependencies
-RUN apk update \
-    && apk add postgresql-dev gcc python3-dev musl-dev
+# install dependencies
+RUN apk update && \
+    apk add postgresql-dev gcc python3-dev musl-dev \
+    openssl-dev libffi-dev
 
 # install dependencies
 COPY --from=builder /usr/src/app/wheels /wheels

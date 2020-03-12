@@ -1,4 +1,4 @@
-# services/services/users/project/api/users/crud.py
+# services/users/project/api/users/crud.py
 
 
 from project import db
@@ -17,8 +17,8 @@ def get_user_by_email(email):
     return User.query.filter_by(email=email).first()
 
 
-def add_user(username, email):
-    user = User(username=username, email=email)
+def add_user(username, email, password):
+    user = User(username=username, email=email, password=password)
     db.session.add(user)
     db.session.commit()
     return user
