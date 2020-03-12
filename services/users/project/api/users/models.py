@@ -2,7 +2,9 @@
 
 
 import os
+import datetime
 
+import jwt
 from flask import current_app
 from sqlalchemy.sql import func
 
@@ -26,6 +28,26 @@ class User(db.Model):
         self.password = bcrypt.generate_password_hash(
             password, current_app.config.get("BCRYPT_LOG_ROUNDS")
         ).decode()
+
+    def encode_token(self, user_id, token_type):
+        if token_type == "access":
+            seconds = current_app.config.get("ACCESS_TOKEN_EXPIRATION")
+        else:
+            seconds = current_app.config.get("REFRESH_TOKEN_EXPIRATION")
+
+        payload = {
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds),
+            "iat": datetime.datetime.utcnow(),
+            "sub": user_id,
+        }
+        return jwt.encode(
+            payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
+        )
+
+    @staticmethod
+    def decode_token(token):
+        payload = jwt.decode(token, current_app.config.get("SECRET_KEY"))
+        return payload["sub"]
 
 
 if os.getenv("FLASK_ENV") == "development":

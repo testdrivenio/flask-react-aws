@@ -20,6 +20,7 @@ build:users:
         --cache-from $IMAGE:users
         --tag $IMAGE:users
         --file ./services/users/Dockerfile.prod
+        --build-arg SECRET_KEY=$SECRET_KEY
         "./services/users"
     - docker push $IMAGE:users
 
