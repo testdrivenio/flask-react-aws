@@ -7,17 +7,16 @@ exports[`renders 1`] = `
       class="field"
     >
       <label
-        class="label is-large"
+        class="label"
         for="input-username"
       >
         Username
       </label>
       <input
-        class="input is-large"
+        class="input"
         id="input-username"
         name="username"
         placeholder="Enter a username"
-        required=""
         type="text"
         value=""
       />
@@ -26,23 +25,40 @@ exports[`renders 1`] = `
       class="field"
     >
       <label
-        class="label is-large"
+        class="label"
         for="input-email"
       >
         Email
       </label>
       <input
-        class="input is-large"
+        class="input"
         id="input-email"
         name="email"
         placeholder="Enter an email address"
-        required=""
         type="email"
         value=""
       />
     </div>
+    <div
+      class="field"
+    >
+      <label
+        class="label"
+        for="input-password"
+      >
+        Password
+      </label>
+      <input
+        class="input"
+        id="input-password"
+        name="password"
+        placeholder="Enter a password"
+        type="password"
+        value=""
+      />
+    </div>
     <input
-      class="button is-primary is-large is-fullwidth"
+      class="button is-primary"
       type="submit"
       value="Submit"
     />
