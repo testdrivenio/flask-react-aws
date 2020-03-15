@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<DocumentFragment>
+  <div>
+    <ul>
+      <li>
+        <strong>
+          Email:
+        </strong>
+         
+        <span
+          data-testid="user-email"
+        >
+          test@test.com
+        </span>
+      </li>
+      <li>
+        <strong>
+          Username:
+        </strong>
+         
+        <span
+          data-testid="user-username"
+        >
+          test
+        </span>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;
