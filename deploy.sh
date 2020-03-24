@@ -49,5 +49,15 @@ deploy_cluster() {
 
 }
 
-configure_aws_cli
-deploy_cluster
+echo $CODEBUILD_WEBHOOK_BASE_REF
+echo $CODEBUILD_WEBHOOK_HEAD_REF
+echo $CODEBUILD_WEBHOOK_TRIGGER
+echo $CODEBUILD_WEBHOOK_EVENT
+
+if  [ "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" ] && \
+    [ "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" ]
+then
+  echo "Updating ECS."
+  configure_aws_cli
+  deploy_cluster
+fi
