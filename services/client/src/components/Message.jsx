@@ -9,7 +9,6 @@ const Message = props => {
   return (
     <section data-testid="message">
       <div className={`notification is-${props.messageType}`}>
-        {/* updated */}
         <button
           className="delete"
           style={style}

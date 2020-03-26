@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
+import axios from "axios";
 import { Redirect } from "react-router-dom";
 
 class UserStatus extends Component {

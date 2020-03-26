@@ -110,6 +110,7 @@ def test_valid_refresh(test_app, test_database, add_user):
     assert resp.content_type == "application/json"
     assert data["access_token"]
     assert data["refresh_token"]
+    assert resp.content_type == "application/json"
 
 
 def test_invalid_refresh_expired_token(test_app, test_database, add_user):

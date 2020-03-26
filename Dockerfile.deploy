@@ -1,12 +1,12 @@
 # build
-FROM node:13.5.0-alpine as build-react
+FROM node:13.10.1-alpine as build-react
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 ENV NODE_ENV production
 ENV REACT_APP_USERS_SERVICE_URL $REACT_APP_USERS_SERVICE_URL
 COPY ./services/client/package*.json ./
 RUN npm install
-RUN npm install react-scripts@3.3.0
+RUN npm install react-scripts@3.4.0
 COPY ./services/client/ .
 RUN npm run build
 

@@ -1,7 +1,7 @@
 # services/users/project/api/__init__.py
 
 
-from flask_restplus import Api
+from flask_restx import Api
 
 from project.api.auth import auth_namespace
 from project.api.ping import ping_namespace

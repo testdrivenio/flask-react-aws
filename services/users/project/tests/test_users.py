@@ -1,4 +1,4 @@
-# services/users/project/tests/test_users.py
+# services/users.project/tests/test_users.py
 
 
 import json
@@ -6,8 +6,8 @@ import json
 import pytest
 
 from project import bcrypt
+from project.api.users.crud import get_user_by_id
 from project.api.users.models import User
-from project.api.users.services import get_user_by_id
 
 
 def test_add_user(test_app, test_database):
@@ -157,28 +157,6 @@ def test_update_user(test_app, test_database, add_user):
     assert "me@testdriven.io" in data["email"]
 
 
-def test_update_user_with_passord(test_app, test_database, add_user):
-    password_one = "greaterthaneight"
-    password_two = "somethingdifferent"
-
-    user = add_user("user-to-be-updated", "update-me@testdriven.io", password_one)
-    assert bcrypt.check_password_hash(user.password, password_one)
-
-    client = test_app.test_client()
-    resp = client.put(
-        f"/users/{user.id}",
-        data=json.dumps(
-            {"username": "me", "email": "me@testdriven.io", "password": password_two}
-        ),
-        content_type="application/json",
-    )
-    assert resp.status_code == 200
-
-    user = get_user_by_id(user.id)
-    assert bcrypt.check_password_hash(user.password, password_one)
-    assert not bcrypt.check_password_hash(user.password, password_two)
-
-
 @pytest.mark.parametrize(
     "user_id, payload, status_code, message",
     [
@@ -202,3 +180,25 @@ def test_update_user_invalid(
     data = json.loads(resp.data.decode())
     assert resp.status_code == status_code
     assert message in data["message"]
+
+
+def test_update_user_with_passord(test_app, test_database, add_user):
+    password_one = "greaterthaneight"
+    password_two = "somethingdifferent"
+
+    user = add_user("user-to-be-updated", "update-me@testdriven.io", password_one)
+    assert bcrypt.check_password_hash(user.password, password_one)
+
+    client = test_app.test_client()
+    resp = client.put(
+        f"/users/{user.id}",
+        data=json.dumps(
+            {"username": "me", "email": "me@testdriven.io", "password": password_two}
+        ),
+        content_type="application/json",
+    )
+    assert resp.status_code == 200
+
+    user = get_user_by_id(user.id)
+    assert bcrypt.check_password_hash(user.password, password_one)
+    assert not bcrypt.check_password_hash(user.password, password_two)

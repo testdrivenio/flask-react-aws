@@ -3,24 +3,20 @@
 
 import jwt
 from flask import request
-from flask_restplus import Namespace, Resource, fields
+from flask_restx import Namespace, Resource, fields
 
 from project import bcrypt
+from project.api.users.crud import add_user, get_user_by_email, get_user_by_id
 from project.api.users.models import User
 
-from project.api.users.services import get_user_by_email  # noqa isort:skip
-from project.api.users.services import get_user_by_id  # noqa isort:skip
-from project.api.users.services import add_user  # noqa isort:skip
-
 auth_namespace = Namespace("auth")
-
 
 user = auth_namespace.model(
     "User",
     {"username": fields.String(required=True), "email": fields.String(required=True)},
 )
 
-full_user = auth_namespace.inherit(
+full_user = auth_namespace.clone(
     "Full User", user, {"password": fields.String(required=True)}
 )
 
@@ -33,7 +29,7 @@ refresh = auth_namespace.model(
     "Refresh", {"refresh_token": fields.String(required=True)}
 )
 
-tokens = auth_namespace.inherit(
+tokens = auth_namespace.clone(
     "Access and refresh_tokens", refresh, {"access_token": fields.String(required=True)}
 )
 
@@ -42,6 +38,7 @@ parser.add_argument("Authorization", location="headers")
 
 
 class Register(Resource):
+    @auth_namespace.doc(params={"id": "An ID"})
     @auth_namespace.marshal_with(user)
     @auth_namespace.expect(full_user, validate=True)
     @auth_namespace.response(201, "Success")

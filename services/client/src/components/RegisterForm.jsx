@@ -70,7 +70,6 @@ const RegisterForm = props => {
                   onBlur={handleBlur}
                 />
                 {errors.username && touched.username && (
-                  // updated
                   <div className="input-feedback" data-testid="errors-username">
                     {errors.username}
                   </div>
@@ -93,7 +92,6 @@ const RegisterForm = props => {
                   onBlur={handleBlur}
                 />
                 {errors.email && touched.email && (
-                  // updated
                   <div className="input-feedback" data-testid="errors-email">
                     {errors.email}
                   </div>
@@ -118,7 +116,6 @@ const RegisterForm = props => {
                   onBlur={handleBlur}
                 />
                 {errors.password && touched.password && (
-                  // updated
                   <div className="input-feedback" data-testid="errors-password">
                     {errors.password}
                   </div>

@@ -1,17 +1,14 @@
 image: docker:stable
 
 stages:
-  - build-users
-  - test-users
-  - build-client
-  - test-client
-  - build-heroku
+  - build
+  - test
 
 variables:
   IMAGE: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
 
-build-users:
-  stage: build-users
+build:users:
+  stage: build
   services:
     - docker:dind
   variables:
@@ -23,29 +20,12 @@ build-users:
         --cache-from $IMAGE:users
         --tag $IMAGE:users
         --file ./services/users/Dockerfile.prod
+        --build-arg SECRET_KEY=$SECRET_KEY
         "./services/users"
     - docker push $IMAGE:users
 
-test-users:
-  stage: test-users
-  image: $IMAGE:users
-  services:
-    - postgres:latest
-  variables:
-    POSTGRES_DB: users
-    POSTGRES_USER: runner
-    POSTGRES_PASSWORD: ""
-    DATABASE_TEST_URL: postgres://runner@postgres:5432/users
-    FLASK_ENV: development
-  script:
-    - cd /usr/src/app
-    - pytest "project/tests" -p no:warnings
-    - flake8 project
-    - black project --check
-    - isort project/**/*.py --check-only
-
-build-client:
-  stage: build-client
+build:client:
+  stage: build
   services:
     - docker:dind
   variables:
@@ -61,22 +41,13 @@ build-client:
         "./services/client"
     - docker push $IMAGE:client
 
-test-client:
-  stage: test-client
-  image: $IMAGE:client
-  script:
-    - cd /usr/src/app
-    - npm run prettier:check
-    - npm run lint
-    - npm run test
-
-build-heroku:
-  stage: build-heroku
+build:heroku:
+  stage: build
   services:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
-    HEROKU_APP_NAME: agile-dawn-21704
+    HEROKU_APP_NAME: nameless-taiga-45632
     HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
   script:
     - apk add --no-cache curl
@@ -101,3 +72,32 @@ build-heroku:
     - docker login -u _ -p $HEROKU_AUTH_TOKEN registry.heroku.com
     - docker push $HEROKU_REGISTRY_IMAGE
     - ./release.sh
+
+test:users:
+  stage: test
+  image: $IMAGE:users
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_DB: users
+    POSTGRES_USER: runner
+    POSTGRES_PASSWORD: runner
+    DATABASE_TEST_URL: postgres://runner:runner@postgres:5432/users
+    FLASK_ENV: development
+  script:
+    - cd /usr/src/app
+    - pip install -r requirements-dev.txt
+    - python -m pytest "project/tests" -p no:warnings
+    - python -m flake8 project
+    - python -m black project --check
+    - python -m isort project/**/*.py --check-only
+
+
+test:client:
+  stage: test
+  image: $IMAGE:client
+  script:
+    - cd /usr/src/app
+    - npm run prettier:check
+    - npm run lint
+    - npm run test

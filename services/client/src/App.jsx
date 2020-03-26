@@ -12,7 +12,6 @@ import UserStatus from "./components/UserStatus";
 import Message from "./components/Message";
 import AddUser from "./components/AddUser";
 
-// new
 const modalStyles = {
   content: {
     top: "0",
@@ -29,7 +28,6 @@ Modal.setAppElement(document.getElementById("root"));
 class App extends Component {
   constructor() {
     super();
-
     this.state = {
       users: [],
       title: "TestDriven.io",
@@ -40,9 +38,9 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.getUsers();
-  }
+  };
 
   getUsers = () => {
     axios
@@ -68,19 +66,6 @@ class App extends Component {
         console.log(err);
         this.handleCloseModal();
         this.createMessage("danger", "That user already exists.");
-      });
-  };
-
-  removeUser = user_id => {
-    axios
-      .delete(`${process.env.REACT_APP_USERS_SERVICE_URL}/users/${user_id}`)
-      .then(res => {
-        this.getUsers();
-        this.createMessage("success", "User removed.");
-      })
-      .catch(err => {
-        console.log(err);
-        this.createMessage("danger", "Something went wrong.");
       });
   };
 
@@ -114,6 +99,12 @@ class App extends Component {
       });
   };
 
+  logoutUser = () => {
+    window.localStorage.removeItem("refreshToken");
+    this.setState({ accessToken: null });
+    this.createMessage("success", "You have logged out.");
+  };
+
   isAuthenticated = () => {
     if (this.state.accessToken || this.validRefresh()) {
       return true;
@@ -141,12 +132,6 @@ class App extends Component {
     return false;
   };
 
-  logoutUser = () => {
-    window.localStorage.removeItem("refreshToken");
-    this.setState({ accessToken: null });
-    this.createMessage("success", "You have logged out.");
-  };
-
   createMessage = (type, text) => {
     this.setState({
       messageType: type,
@@ -170,6 +155,19 @@ class App extends Component {
 
   handleCloseModal = () => {
     this.setState({ showModal: false });
+  };
+
+  removeUser = user_id => {
+    axios
+      .delete(`${process.env.REACT_APP_USERS_SERVICE_URL}/users/${user_id}`)
+      .then(res => {
+        this.getUsers();
+        this.createMessage("success", "User removed.");
+      })
+      .catch(err => {
+        console.log(err);
+        this.createMessage("danger", "Something went wrong.");
+      });
   };
 
   render() {
