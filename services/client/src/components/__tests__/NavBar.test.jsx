@@ -1,23 +1,23 @@
 import React from "react";
-import { cleanup, wait } from "@testing-library/react";
+import { cleanup, waitFor } from "@testing-library/react";
 
 import NavBar from "../NavBar";
 
 afterEach(cleanup);
 
 describe("when unauthenticated", () => {
-  const props = {
-    title: "Hello, World!",
-    logoutUser: () => {
-      return true;
-    },
-    isAuthenticated: jest.fn().mockImplementation(() => false)
-  };
-
   it("renders the default props", async () => {
+    const props = {
+      title: "Hello, World!",
+      logoutUser: () => {
+        return true;
+      },
+      isAuthenticated: jest.fn().mockImplementation(() => false),
+    };
+
     const { getByText, findByTestId } = renderWithRouter(<NavBar {...props} />);
     expect(getByText(props.title)).toHaveClass("nav-title");
-    await wait(() => {
+    await waitFor(() => {
       expect(props.isAuthenticated).toHaveBeenCalledTimes(1);
     });
     expect((await findByTestId("nav-about")).innerHTML).toBe("About");
@@ -26,24 +26,30 @@ describe("when unauthenticated", () => {
   });
 
   it("renders", () => {
+    const props = {
+      title: "Hello, World!",
+      logoutUser: () => {
+        return true;
+      },
+      isAuthenticated: jest.fn().mockImplementation(() => false),
+    };
     const { asFragment } = renderWithRouter(<NavBar {...props} />);
     expect(asFragment()).toMatchSnapshot();
   });
 });
 
 describe("when authenticated", () => {
-  const props = {
-    title: "Hello, World!",
-    logoutUser: () => {
-      return true;
-    },
-    isAuthenticated: jest.fn().mockImplementation(() => true)
-  };
-
   it("renders the default props", async () => {
+    const props = {
+      title: "Hello, World!",
+      logoutUser: () => {
+        return true;
+      },
+      isAuthenticated: jest.fn().mockImplementation(() => true),
+    };
     const { getByText, findByTestId } = renderWithRouter(<NavBar {...props} />);
     expect(getByText(props.title)).toHaveClass("nav-title");
-    await wait(() => {
+    await waitFor(() => {
       expect(props.isAuthenticated).toHaveBeenCalledTimes(1);
     });
     expect((await findByTestId("nav-about")).innerHTML).toBe("About");
@@ -52,6 +58,13 @@ describe("when authenticated", () => {
   });
 
   it("renders", () => {
+    const props = {
+      title: "Hello, World!",
+      logoutUser: () => {
+        return true;
+      },
+      isAuthenticated: jest.fn().mockImplementation(() => true),
+    };
     const { asFragment } = renderWithRouter(<NavBar {...props} />);
     expect(asFragment()).toMatchSnapshot();
   });

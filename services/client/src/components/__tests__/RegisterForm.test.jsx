@@ -1,5 +1,5 @@
 import React from "react";
-import { cleanup, fireEvent, wait } from "@testing-library/react";
+import { cleanup, fireEvent, waitFor } from "@testing-library/react";
 
 import RegisterForm from "../RegisterForm";
 
@@ -12,7 +12,7 @@ describe("renders", () => {
     },
     isAuthenticated: () => {
       return false;
-    }
+    },
   };
 
   it("properly", () => {
@@ -50,7 +50,7 @@ describe("renders", () => {
 describe("handles form validation correctly", () => {
   const mockProps = {
     handleRegisterFormSubmit: jest.fn(),
-    isAuthenticated: jest.fn()
+    isAuthenticated: jest.fn(),
   };
 
   it("when fields are empty", async () => {
@@ -81,7 +81,7 @@ describe("handles form validation correctly", () => {
 
     fireEvent.submit(form);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
     });
   });
@@ -105,7 +105,7 @@ describe("handles form validation correctly", () => {
 
     fireEvent.submit(form);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
     });
   });
@@ -141,7 +141,7 @@ describe("handles form validation correctly", () => {
 
     fireEvent.submit(form);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
     });
   });
@@ -167,7 +167,7 @@ describe("handles form validation correctly", () => {
 
     fireEvent.submit(form);
 
-    await wait(() => {
+    await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(1);
     });
   });

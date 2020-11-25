@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:13.10.1-alpine
+FROM node:15.2.0-alpine
 
 # set working directory
 WORKDIR /usr/src/app
@@ -8,10 +8,10 @@ WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-COPY package-lock.json /usr/src/app/package-lock.json
+COPY package.json .
+COPY package-lock.json .
 RUN npm ci
-RUN npm install react-scripts@3.4.0 -g --silent
+RUN npm install react-scripts@4.0.0 prettier@2.1.1 eslint@7.13.0 -g --silent
 
 # start app
 CMD ["npm", "start"]

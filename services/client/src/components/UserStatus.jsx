@@ -8,7 +8,7 @@ class UserStatus extends Component {
     super(props);
     this.state = {
       email: "",
-      username: ""
+      username: "",
     };
   }
   componentDidMount() {
@@ -16,21 +16,21 @@ class UserStatus extends Component {
   }
   getUserStatus(event) {
     const options = {
-      url: `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/status`,
+      url: `${process.env.REACT_APP_API_SERVICE_URL}/auth/status`,
       method: "get",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.props.accessToken}`
-      }
+        Authorization: `Bearer ${this.props.accessToken}`,
+      },
     };
     return axios(options)
-      .then(res => {
+      .then((res) => {
         this.setState({
           email: res.data.email,
-          username: res.data.username
+          username: res.data.username,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }
@@ -57,7 +57,7 @@ class UserStatus extends Component {
 
 UserStatus.propTypes = {
   accessToken: PropTypes.string,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default UserStatus;

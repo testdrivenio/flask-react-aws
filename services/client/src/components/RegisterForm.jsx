@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 
 import "./form.css";
 
-const RegisterForm = props => {
+const RegisterForm = (props) => {
   if (props.isAuthenticated()) {
     return <Redirect to="/" />;
   }
@@ -19,7 +19,7 @@ const RegisterForm = props => {
         initialValues={{
           username: "",
           email: "",
-          password: ""
+          password: "",
         }}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           props.handleRegisterFormSubmit(values);
@@ -36,10 +36,10 @@ const RegisterForm = props => {
             .min(6, "Email must be greater than 5 characters."),
           password: Yup.string()
             .required("Password is required.")
-            .min(11, "Password must be greater than 10 characters.")
+            .min(11, "Password must be greater than 10 characters."),
         })}
       >
-        {props => {
+        {(props) => {
           const {
             values,
             touched,
@@ -47,7 +47,7 @@ const RegisterForm = props => {
             isSubmitting,
             handleChange,
             handleBlur,
-            handleSubmit
+            handleSubmit,
           } = props;
           return (
             <form onSubmit={handleSubmit}>
@@ -137,7 +137,7 @@ const RegisterForm = props => {
 
 RegisterForm.propTypes = {
   handleRegisterFormSubmit: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default RegisterForm;

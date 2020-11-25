@@ -1,8 +1,8 @@
 input.error {
-  border-color: red;
-}
+    border-color: red;
+  }
 
-.input-feedback {
-  color: red;
-  margin-top: .25rem;
-}
+  .input-feedback {
+    color: red;
+    margin-top: .25rem;
+  }

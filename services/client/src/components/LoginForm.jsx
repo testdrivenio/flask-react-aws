@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 
 import "./form.css";
 
-const LoginForm = props => {
+const LoginForm = (props) => {
   if (props.isAuthenticated()) {
     return <Redirect to="/" />;
   }
@@ -18,7 +18,7 @@ const LoginForm = props => {
       <Formik
         initialValues={{
           email: "",
-          password: ""
+          password: "",
         }}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           props.handleLoginFormSubmit(values);
@@ -29,10 +29,10 @@ const LoginForm = props => {
           email: Yup.string()
             .email("Enter a valid email.")
             .required("Email is required."),
-          password: Yup.string().required("Password is required.")
+          password: Yup.string().required("Password is required."),
         })}
       >
-        {props => {
+        {(props) => {
           const {
             values,
             touched,
@@ -40,7 +40,7 @@ const LoginForm = props => {
             isSubmitting,
             handleChange,
             handleBlur,
-            handleSubmit
+            handleSubmit,
           } = props;
           return (
             <form onSubmit={handleSubmit}>
@@ -102,7 +102,7 @@ const LoginForm = props => {
 
 LoginForm.propTypes = {
   handleLoginFormSubmit: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

@@ -8,7 +8,7 @@ afterEach(cleanup);
 const props = {
   addUser: () => {
     return true;
-  }
+  },
 };
 
 it("renders with default props", () => {

@@ -1,24 +1,23 @@
-# pull official base image
-FROM python:3.8.1-slim
 
-# install netcat
-RUN apt-get update && \
-    apt-get -y install netcat && \
-    apt-get clean
+# pull official base image
+FROM python:3.9.0-slim-buster
 
 # set working directory
 WORKDIR /usr/src/app
 
-# set environment varibles
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# add and install requirements
-COPY ./requirements.txt /usr/src/app/requirements.txt
+# install system dependencies
+RUN apt-get update \
+  && apt-get -y install netcat \
+  && apt-get clean
+
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # add app
-COPY . /usr/src/app
-
-# run server
-CMD gunicorn -b 0.0.0.0:5000 manage:app
+COPY . .
