@@ -10,11 +10,11 @@ global.renderWithRouter = function renderWithRouter(
   ui,
   {
     route = "/",
-    history = createMemoryHistory({ initialEntries: [route] })
+    history = createMemoryHistory({ initialEntries: [route] }),
   } = {}
 ) {
   return {
     ...render(<Router history={history}>{ui}</Router>),
-    history
+    history,
   };
 };

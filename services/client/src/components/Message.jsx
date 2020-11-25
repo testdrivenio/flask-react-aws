@@ -2,10 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const style = {
-  top: "auto"
+  top: "auto",
 };
 
-const Message = props => {
+const Message = (props) => {
   return (
     <section data-testid="message">
       <div className={`notification is-${props.messageType}`}>
@@ -25,7 +25,7 @@ const Message = props => {
 Message.propTypes = {
   messageType: PropTypes.string.isRequired,
   messageText: PropTypes.string.isRequired,
-  removeMessage: PropTypes.func.isRequired
+  removeMessage: PropTypes.func.isRequired,
 };
 
 export default Message;

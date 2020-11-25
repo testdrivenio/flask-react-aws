@@ -9,7 +9,7 @@ describe('when "messageType" is "success"', () => {
   const props = {
     messageType: "success",
     messageText: "Hello, World!",
-    removeMessage: () => true
+    removeMessage: () => true,
   };
 
   it("renders the default props", async () => {
@@ -28,7 +28,7 @@ describe('when "messageType" is "danger"', () => {
   const props = {
     messageType: "danger",
     messageText: "Hello, World!",
-    removeMessage: () => true
+    removeMessage: () => true,
   };
 
   it("renders the default props", () => {

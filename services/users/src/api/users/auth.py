@@ -1,28 +1,30 @@
-# services/users/project/api/auth.py
-
+# services/users/src/api/auth.py
 
 import jwt
 from flask import request
 from flask_restx import Namespace, Resource, fields
 
-from project import bcrypt
-from project.api.users.crud import add_user, get_user_by_email, get_user_by_id
-from project.api.users.models import User
+from src import bcrypt
+from src.api.users.crud import add_user, get_user_by_email, get_user_by_id
+from src.api.users.models import User
 
 auth_namespace = Namespace("auth")
-
 user = auth_namespace.model(
     "User",
-    {"username": fields.String(required=True), "email": fields.String(required=True)},
+    {
+        "username": fields.String(required=True),
+        "email": fields.String(required=True),
+    },
 )
-
 full_user = auth_namespace.clone(
     "Full User", user, {"password": fields.String(required=True)}
 )
-
 login = auth_namespace.model(
     "User",
-    {"email": fields.String(required=True), "password": fields.String(required=True)},
+    {
+        "email": fields.String(required=True),
+        "password": fields.String(required=True),
+    },
 )
 
 refresh = auth_namespace.model(
@@ -32,13 +34,11 @@ refresh = auth_namespace.model(
 tokens = auth_namespace.clone(
     "Access and refresh_tokens", refresh, {"access_token": fields.String(required=True)}
 )
-
 parser = auth_namespace.parser()
 parser.add_argument("Authorization", location="headers")
 
 
 class Register(Resource):
-    @auth_namespace.doc(params={"id": "An ID"})
     @auth_namespace.marshal_with(user)
     @auth_namespace.expect(full_user, validate=True)
     @auth_namespace.response(201, "Success")
@@ -52,6 +52,7 @@ class Register(Resource):
         user = get_user_by_email(email)
         if user:
             auth_namespace.abort(400, "Sorry. That email already exists.")
+
         user = add_user(username, email, password)
         return user, 201
 
@@ -70,6 +71,7 @@ class Login(Resource):
         user = get_user_by_email(email)
         if not user or not bcrypt.check_password_hash(user.password, password):
             auth_namespace.abort(404, "User does not exist")
+
         access_token = user.encode_token(user.id, "access")
         refresh_token = user.encode_token(user.id, "refresh")
 
@@ -93,8 +95,10 @@ class Refresh(Resource):
         try:
             resp = User.decode_token(refresh_token)
             user = get_user_by_id(resp)
+
             if not user:
                 auth_namespace.abort(401, "Invalid token")
+
             access_token = user.encode_token(user.id, "access")
             refresh_token = user.encode_token(user.id, "refresh")
 

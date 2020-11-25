@@ -5,10 +5,10 @@ import PropTypes from "prop-types";
 import "./NavBar.css";
 
 const titleStyle = {
-  fontWeight: "bold"
+  fontWeight: "bold",
 };
 
-const NavBar = props => {
+const NavBar = (props) => {
   let menu = (
     <div className="navbar-menu">
       <div className="navbar-start">
@@ -84,7 +84,7 @@ const NavBar = props => {
 NavBar.propTypes = {
   title: PropTypes.string.isRequired,
   logoutUser: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default NavBar;

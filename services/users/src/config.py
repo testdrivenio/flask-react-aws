@@ -1,4 +1,4 @@
-# services/users/project/config.py
+# services/users/src/config.py
 
 
 import os
@@ -9,8 +9,8 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "my_precious"
     BCRYPT_LOG_ROUNDS = 13
-    ACCESS_TOKEN_EXPIRATION = 900  # 15 minutes
-    REFRESH_TOKEN_EXPIRATION = 2592000  # 30 days
+    ACCESS_TOKEN_EXPIRATION = 900
+    REFRESH_TOKEN_EXPIRATION = 2592000
 
 
 class DevelopmentConfig(BaseConfig):

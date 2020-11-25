@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const UsersList = props => {
+const UsersList = (props) => {
   return (
     <div>
       <table className="table is-hoverable is-fullwidth">
@@ -14,7 +14,7 @@ const UsersList = props => {
           </tr>
         </thead>
         <tbody>
-          {props.users.map(user => {
+          {props.users.map((user) => {
             return (
               <tr key={user.id}>
                 <td>{user.id}</td>
@@ -42,7 +42,7 @@ const UsersList = props => {
 UsersList.propTypes = {
   users: PropTypes.array.isRequired,
   removeUser: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.func.isRequired
+  isAuthenticated: PropTypes.func.isRequired,
 };
 
 export default UsersList;

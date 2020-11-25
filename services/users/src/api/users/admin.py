@@ -1,10 +1,10 @@
-# services/users/project/api/users/admin.py
+# services/users/src/api/users/admin.py
 
 
 from flask import current_app
-
-from project import bcrypt
 from flask_admin.contrib.sqla import ModelView
+
+from src import bcrypt
 
 
 class UsersAdminView(ModelView):

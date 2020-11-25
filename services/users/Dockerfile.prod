@@ -3,20 +3,19 @@
 ###########
 
 # pull official base image
-FROM python:3.8.1-alpine as builder
+FROM python:3.9.0-slim-buster as builder
 
-# install dependencies
-RUN apk update && \
-    apk add --no-cache --virtual build-deps \
-    openssl-dev libffi-dev gcc python3-dev musl-dev \
-    postgresql-dev netcat-openbsd
-
-# set work directory
+# set working directory
 WORKDIR /usr/src/app
 
-# set environment varibles
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+# install system dependencies
+RUN apt-get update \
+  && apt-get -y install gcc postgresql \
+  && apt-get clean
 
 # install dependencies
 RUN pip install --upgrade pip
@@ -24,11 +23,11 @@ COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 # lint
-COPY . /usr/src/app/
-RUN pip install black flake8 isort
-RUN flake8 project
-RUN black --exclude=migrations project
-RUN isort project/**/*.py
+COPY . .
+RUN pip install black==20.8b1 flake8===3.8.4 isort==5.6.4
+RUN flake8 src
+RUN black src --check
+RUN isort src --check-only
 
 
 #########
@@ -36,7 +35,7 @@ RUN isort project/**/*.py
 #########
 
 # pull official base image
-FROM python:3.8.1-alpine
+FROM python:3.9.0-slim-buster
 
 # set work directory
 WORKDIR /usr/src/app
@@ -45,14 +44,14 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV FLASK_ENV production
-ENV APP_SETTINGS project.config.ProductionConfig
+ENV APP_SETTINGS src.config.ProductionConfig
 ARG SECRET_KEY
 ENV SECRET_KEY $SECRET_KEY
 
-# install dependencies
-RUN apk update && \
-    apk add postgresql-dev gcc python3-dev musl-dev \
-    openssl-dev libffi-dev
+# install system dependencies
+RUN apt-get update \
+  && apt-get -y install gcc postgresql \
+  && apt-get clean
 
 # install dependencies
 COPY --from=builder /usr/src/app/wheels /wheels
@@ -61,10 +60,10 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 
 # add app
-COPY . /usr/src/app
+COPY . .
 
 # add and run as non-root user
-RUN adduser -D myuser
+RUN adduser --disabled-password myuser
 USER myuser
 
 # run gunicorn

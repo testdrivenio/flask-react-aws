@@ -1,4 +1,4 @@
-# services/users/project/tests/test_auth.py
+# services/users/src/tests/test_auth.py
 
 
 import json
@@ -7,12 +7,16 @@ import pytest
 from flask import current_app
 
 
-def test_user_registration(test_app, test_database, add_user):
+def test_user_registration(test_app, test_database):
     client = test_app.test_client()
     resp = client.post(
         "/auth/register",
         data=json.dumps(
-            {"username": "justatest", "email": "test@test.com", "password": "123456"}
+            {
+                "username": "justatest",
+                "email": "test@test.com",
+                "password": "123456",
+            }
         ),
         content_type="application/json",
     )
@@ -43,16 +47,18 @@ def test_user_registration_duplicate_email(test_app, test_database, add_user):
 @pytest.mark.parametrize(
     "payload",
     [
-        [{}],
-        [{"email": "me@testdriven.io", "password": "greaterthanten"}],
-        [{"username": "michael", "password": "greaterthanten"}],
-        [{"email": "me@testdriven.io", "username": "michael"}],
+        {},
+        {"email": "me@testdriven.io", "password": "greaterthanten"},
+        {"username": "michael", "password": "greaterthanten"},
+        {"email": "me@testdriven.io", "username": "michael"},
     ],
 )
 def test_user_registration_invalid_json(test_app, test_database, payload):
     client = test_app.test_client()
     resp = client.post(
-        f"/auth/register", data=json.dumps(payload), content_type="application/json",
+        "/auth/register",
+        data=json.dumps(payload),
+        content_type="application/json",
     )
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
@@ -98,7 +104,6 @@ def test_valid_refresh(test_app, test_database, add_user):
         content_type="application/json",
     )
     # valid refresh
-    data = json.loads(resp_login.data.decode())
     refresh_token = json.loads(resp_login.data.decode())["refresh_token"]
     resp = client.post(
         "/auth/refresh",

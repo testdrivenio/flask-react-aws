@@ -11,7 +11,7 @@ const props = {
   },
   isAuthenticated: () => {
     return false;
-  }
+  },
 };
 
 it("renders properly", () => {

@@ -1,13 +1,13 @@
-# services/users.project/tests/test_users.py
+# src/tests/test_users.py
 
 
 import json
 
 import pytest
 
-from project import bcrypt
-from project.api.users.crud import get_user_by_id
-from project.api.users.models import User
+from src import bcrypt
+from src.api.users.crud import get_user_by_id
+from src.api.users.models import User
 
 
 def test_add_user(test_app, test_database):
@@ -30,7 +30,11 @@ def test_add_user(test_app, test_database):
 
 def test_add_user_invalid_json(test_app, test_database):
     client = test_app.test_client()
-    resp = client.post("/users", data=json.dumps({}), content_type="application/json",)
+    resp = client.post(
+        "/users",
+        data=json.dumps({}),
+        content_type="application/json",
+    )
     data = json.loads(resp.data.decode())
     assert resp.status_code == 400
     assert "Input payload validation failed" in data["message"]
@@ -40,7 +44,9 @@ def test_add_user_invalid_json_keys(test_app, test_database):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps({"email": "john@testdriven.io"}),
+        data=json.dumps(
+            {"email": "john@testdriven.io", "password": "greaterthaneight"}
+        ),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -85,7 +91,7 @@ def test_single_user(test_app, test_database, add_user):
     assert resp.status_code == 200
     assert "jeffrey" in data["username"]
     assert "jeffrey@testdriven.io" in data["email"]
-    assert "password" not in data
+    assert "password" not in data  # new
 
 
 def test_single_user_incorrect_id(test_app, test_database):
@@ -109,8 +115,8 @@ def test_all_users(test_app, test_database, add_user):
     assert "michael@mherman.org" in data[0]["email"]
     assert "fletcher" in data[1]["username"]
     assert "fletcher@notreal.com" in data[1]["email"]
-    assert "password" not in data[0]
-    assert "password" not in data[1]
+    assert "password" not in data[0]  # new
+    assert "password" not in data[1]  # new
 
 
 def test_remove_user(test_app, test_database, add_user):
@@ -121,10 +127,12 @@ def test_remove_user(test_app, test_database, add_user):
     data = json.loads(resp_one.data.decode())
     assert resp_one.status_code == 200
     assert len(data) == 1
+
     resp_two = client.delete(f"/users/{user.id}")
     data = json.loads(resp_two.data.decode())
     assert resp_two.status_code == 200
     assert "remove-me@testdriven.io was removed!" in data["message"]
+
     resp_three = client.get("/users")
     data = json.loads(resp_three.data.decode())
     assert resp_three.status_code == 200
@@ -150,6 +158,7 @@ def test_update_user(test_app, test_database, add_user):
     data = json.loads(resp_one.data.decode())
     assert resp_one.status_code == 200
     assert f"{user.id} was updated!" in data["message"]
+
     resp_two = client.get(f"/users/{user.id}")
     data = json.loads(resp_two.data.decode())
     assert resp_two.status_code == 200
@@ -175,11 +184,28 @@ def test_update_user_invalid(
 ):
     client = test_app.test_client()
     resp = client.put(
-        f"/users/{user_id}", data=json.dumps(payload), content_type="application/json",
+        f"/users/{user_id}",
+        data=json.dumps(payload),
+        content_type="application/json",
     )
     data = json.loads(resp.data.decode())
     assert resp.status_code == status_code
     assert message in data["message"]
+
+
+def test_update_user_duplicate_email(test_app, test_database, add_user):
+    add_user("hajek", "rob@hajek.org", "greaterthaneight")
+    user = add_user("rob", "rob@notreal.com", "greaterthaneight")
+
+    client = test_app.test_client()
+    resp = client.put(
+        f"/users/{user.id}",
+        data=json.dumps({"username": "rob", "email": "rob@notreal.com"}),
+        content_type="application/json",
+    )
+    data = json.loads(resp.data.decode())
+    assert resp.status_code == 400
+    assert "Sorry. That email already exists." in data["message"]
 
 
 def test_update_user_with_passord(test_app, test_database, add_user):
@@ -193,7 +219,7 @@ def test_update_user_with_passord(test_app, test_database, add_user):
     resp = client.put(
         f"/users/{user.id}",
         data=json.dumps(
-            {"username": "me", "email": "me@testdriven.io", "password": password_two}
+            {"username": "me", "email": "foo@testdriven.io", "password": password_two}
         ),
         content_type="application/json",
     )

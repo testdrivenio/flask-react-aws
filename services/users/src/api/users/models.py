@@ -1,14 +1,13 @@
-# services/users/project/api/users/models.py
+# services/users/src/api/users/models.py
 
-
-import os
 import datetime
+import os
 
 import jwt
 from flask import current_app
 from sqlalchemy.sql import func
 
-from project import db, bcrypt
+from src import bcrypt, db
 
 
 class User(db.Model):
@@ -51,7 +50,7 @@ class User(db.Model):
 
 
 if os.getenv("FLASK_ENV") == "development":
-    from project import admin
-    from project.api.users.admin import UsersAdminView
+    from src import admin
+    from src.api.users.admin import UsersAdminView
 
     admin.add_view(UsersAdminView(User, db.session))
