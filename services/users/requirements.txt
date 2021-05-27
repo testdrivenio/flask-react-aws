@@ -1,5 +1,6 @@
 flask==1.1.4
 Flask-Admin==1.5.8
+flask-bcrypt==0.7.1
 flask-cors==3.0.10
 flask-restx==0.4.0
 Flask-SQLAlchemy==2.5.1

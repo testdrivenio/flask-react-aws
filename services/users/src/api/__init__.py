@@ -1,4 +1,4 @@
-# src/api/__init__.py
+# services/users/src/api/__init__.py
 
 
 from flask_restx import Api
