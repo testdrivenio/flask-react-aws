@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Route, Switch } from "react-router-dom";
 
-import About from "./components/About";
-import AddUser from "./components/AddUser";
-import LoginForm from "./components/LoginForm";
-import NavBar from "./components/NavBar";
-import RegisterForm from "./components/RegisterForm";
 import UsersList from "./components/UsersList";
+import AddUser from "./components/AddUser";
+import About from "./components/About";
+import NavBar from "./components/NavBar";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 
 class App extends Component {
   constructor() {
@@ -15,27 +15,17 @@ class App extends Component {
 
     this.state = {
       users: [],
-      username: "",
-      email: "",
       title: "TestDriven.io",
     };
 
     this.addUser = this.addUser.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     this.getUsers();
   }
 
-  addUser(event) {
-    event.preventDefault();
-
-    const data = {
-      username: this.state.username,
-      email: this.state.email,
-    };
-
+  addUser(data) {
     axios
       .post(`${process.env.REACT_APP_API_SERVICE_URL}/users`, data)
       .then((res) => {
@@ -58,12 +48,6 @@ class App extends Component {
       });
   }
 
-  handleChange(event) {
-    const obj = {};
-    obj[event.target.name] = event.target.value;
-    this.setState(obj);
-  }
-
   render() {
     return (
       <div>
@@ -82,13 +66,7 @@ class App extends Component {
                         <h1 className="title is-1">Users</h1>
                         <hr />
                         <br />
-                        <AddUser
-                          username={this.state.username}
-                          email={this.state.email}
-                          addUser={this.addUser}
-                          // eslint-disable-next-line react/jsx-handler-names
-                          handleChange={this.handleChange}
-                        />
+                        <AddUser addUser={this.addUser} />
                         <br />
                         <br />
                         <UsersList users={this.state.users} />
