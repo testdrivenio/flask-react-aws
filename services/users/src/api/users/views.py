@@ -1,4 +1,4 @@
-# src/api/users.py
+# services/users/src/api/users/views.py
 
 
 from flask import request
@@ -37,7 +37,7 @@ class UsersList(Resource):
         """Returns all users."""
         return get_all_users(), 200
 
-    @users_namespace.expect(user_post, validate=True)  # updated
+    @users_namespace.expect(user_post, validate=True)
     @users_namespace.response(201, "<user_email> was added!")
     @users_namespace.response(400, "Sorry. That email already exists.")
     def post(self):
@@ -96,7 +96,7 @@ class Users(Resource):
     @users_namespace.response(200, "<user_id> was removed!")
     @users_namespace.response(404, "User <user_id> does not exist")
     def delete(self, user_id):
-        """"Deletes a user."""
+        """ "Deletes a user."""
         response_object = {}
         user = get_user_by_id(user_id)
 

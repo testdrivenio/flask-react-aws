@@ -9,6 +9,7 @@ from src.api.users.crud import add_user, get_user_by_email, get_user_by_id
 from src.api.users.models import User
 
 auth_namespace = Namespace("auth")
+
 user = auth_namespace.model(
     "User",
     {
@@ -16,11 +17,13 @@ user = auth_namespace.model(
         "email": fields.String(required=True),
     },
 )
+
 full_user = auth_namespace.clone(
     "Full User", user, {"password": fields.String(required=True)}
 )
+
 login = auth_namespace.model(
-    "User",
+    "Login User",
     {
         "email": fields.String(required=True),
         "password": fields.String(required=True),
@@ -34,6 +37,7 @@ refresh = auth_namespace.model(
 tokens = auth_namespace.clone(
     "Access and refresh_tokens", refresh, {"access_token": fields.String(required=True)}
 )
+
 parser = auth_namespace.parser()
 parser.add_argument("Authorization", location="headers")
 
@@ -52,8 +56,8 @@ class Register(Resource):
         user = get_user_by_email(email)
         if user:
             auth_namespace.abort(400, "Sorry. That email already exists.")
-
         user = add_user(username, email, password)
+
         return user, 201
 
 
@@ -75,10 +79,7 @@ class Login(Resource):
         access_token = user.encode_token(user.id, "access")
         refresh_token = user.encode_token(user.id, "refresh")
 
-        response_object = {
-            "access_token": access_token.decode(),
-            "refresh_token": refresh_token.decode(),
-        }
+        response_object = {"access_token": access_token, "refresh_token": refresh_token}
         return response_object, 200
 
 
@@ -103,8 +104,8 @@ class Refresh(Resource):
             refresh_token = user.encode_token(user.id, "refresh")
 
             response_object = {
-                "access_token": access_token.decode(),
-                "refresh_token": refresh_token.decode(),
+                "access_token": access_token,
+                "refresh_token": refresh_token,
             }
             return response_object, 200
         except jwt.ExpiredSignatureError:

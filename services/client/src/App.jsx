@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Route, Switch } from "react-router-dom";
-import Modal from "react-modal";
 
-import UsersList from "./components/UsersList";
-import About from "./components/About";
-import NavBar from "./components/NavBar";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
-import UserStatus from "./components/UserStatus";
-import Message from "./components/Message";
 import AddUser from "./components/AddUser";
+import About from "./components/About";
+import LoginForm from "./components/LoginForm";
+import Message from "./components/Message";
+import Modal from "react-modal";
+import NavBar from "./components/NavBar";
+import RegisterForm from "./components/RegisterForm";
+import UsersList from "./components/UsersList";
+import UserStatus from "./components/UserStatus";
 
 const modalStyles = {
   content: {
@@ -69,7 +69,7 @@ class App extends Component {
     }, 3000);
   };
 
-  getUsers = () => {
+  getUsers() {
     axios
       .get(`${process.env.REACT_APP_API_SERVICE_URL}/users`)
       .then((res) => {
@@ -78,7 +78,7 @@ class App extends Component {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }
 
   handleCloseModal = () => {
     this.setState({ showModal: false });
@@ -151,7 +151,7 @@ class App extends Component {
       });
   };
 
-  validRefresh = () => {
+  validRefresh() {
     const token = window.localStorage.getItem("refreshToken");
     if (token) {
       axios
@@ -169,7 +169,7 @@ class App extends Component {
         });
     }
     return false;
-  };
+  }
 
   render() {
     return (
