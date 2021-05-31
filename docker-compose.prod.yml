@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+
+  api:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile.prod
+    ports:
+      - 5004:5000
+    environment:
+      - FLASK_ENV=production
+      - APP_SETTINGS=src.config.ProductionConfig
+      - DATABASE_URL=postgres://postgres:postgres@api-db:5432/api_prod
+      - DATABASE_TEST_URL=postgres://postgres:postgres@api-db:5432/api_test
+      - SECRET_KEY=my_precious
+    depends_on:
+      - api-db
+
+  api-db:
+    build:
+      context: ./services/users/src/db
+      dockerfile: Dockerfile
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  client:
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile.prod
+      args:
+        - NODE_ENV=production
+        - REACT_APP_API_SERVICE_URL=${REACT_APP_API_SERVICE_URL}
+    ports:
+      - 3007:80
+    depends_on:
+      - api
