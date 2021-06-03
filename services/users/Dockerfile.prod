@@ -20,6 +20,3 @@ RUN pip install -r requirements.txt
 
 # add app
 COPY . .
-
-# run server
-CMD gunicorn -b 0.0.0.0:5000 manage:app
