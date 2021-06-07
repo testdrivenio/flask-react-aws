@@ -9,8 +9,9 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = "my_precious"
     BCRYPT_LOG_ROUNDS = 13
-    ACCESS_TOKEN_EXPIRATION = 900
-    REFRESH_TOKEN_EXPIRATION = 2592000
+    # new
+    ACCESS_TOKEN_EXPIRATION = 900  # 15 minutes
+    REFRESH_TOKEN_EXPIRATION = 2592000  # 30 days
 
 
 class DevelopmentConfig(BaseConfig):
@@ -27,5 +28,10 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    url = os.environ.get("DATABASE_URL")
+
+    if url is not None and url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+
+    SQLALCHEMY_DATABASE_URI = url
     SECRET_KEY = os.getenv("SECRET_KEY", "my_precious")

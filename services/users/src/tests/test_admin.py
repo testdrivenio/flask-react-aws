@@ -1,4 +1,4 @@
-# src/tests/test_admin.py
+# services/users/src/tests/test_admin.py
 
 
 import os

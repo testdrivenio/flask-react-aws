@@ -13,11 +13,11 @@ def test_passwords_are_random(test_app, test_database, add_user):
 def test_encode_token(test_app, test_database, add_user):
     user = add_user("justatest", "test@test.com", "test")
     token = user.encode_token(user.id, "access")
-    assert isinstance(token, bytes)
+    assert isinstance(token, str)
 
 
 def test_decode_token(test_app, test_database, add_user):
     user = add_user("justatest", "test@test.com", "test")
     token = user.encode_token(user.id, "access")
-    assert isinstance(token, bytes)
+    assert isinstance(token, str)
     assert User.decode_token(token) == user.id

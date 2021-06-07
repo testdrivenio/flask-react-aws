@@ -1,12 +1,12 @@
 # build
-FROM node:15.2.0-alpine as build-react
+FROM node:16-alpine as build-react
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 ENV NODE_ENV production
 ENV REACT_APP_API_SERVICE_URL $REACT_APP_API_SERVICE_URL
 COPY ./services/client/package*.json ./
 RUN npm install
-RUN npm install react-scripts@4.0.0
+RUN npm install react-scripts@4.0.3
 COPY ./services/client/ .
 RUN rm .eslintrc.json
 RUN npm run build
@@ -20,7 +20,7 @@ ENV APP_SETTINGS=src.config.ProductionConfig
 WORKDIR /app
 RUN apk update && \
     apk add --no-cache --virtual build-deps \
-    openssl-dev libffi-dev gcc python3-dev musl-dev \
+    openssl-dev libffi-dev gcc python3-dev musl-dev g++ \
     postgresql-dev netcat-openbsd
 RUN python3 -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \

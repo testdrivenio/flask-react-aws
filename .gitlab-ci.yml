@@ -47,7 +47,7 @@ build:heroku:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
-    HEROKU_APP_NAME: ancient-caverns-14228
+    HEROKU_APP_NAME: young-meadow-12799
     HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
   script:
     - apk add --no-cache curl
@@ -82,7 +82,7 @@ test:users:
     POSTGRES_DB: users
     POSTGRES_USER: runner
     POSTGRES_PASSWORD: runner
-    DATABASE_TEST_URL: postgres://runner:runner@postgres:5432/users
+    DATABASE_TEST_URL: postgresql://runner:runner@postgres:5432/users
     FLASK_ENV: development
   script:
     - cd /usr/src/app
