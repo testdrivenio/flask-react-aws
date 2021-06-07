@@ -4,7 +4,7 @@ import React from "react";
 import { Router } from "react-router-dom";
 import { render } from "@testing-library/react";
 import { createMemoryHistory } from "history";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
 
 global.renderWithRouter = function renderWithRouter(
   ui,

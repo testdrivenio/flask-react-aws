@@ -37,10 +37,24 @@ variable "health_check_path_client" {
   description = "Health check path for the default target group"
   default     = "/"
 }
-
 variable "health_check_path_users" {
   description = "Health check path for the default target group"
   default     = "/ping"
+}
+
+
+# logs
+
+variable "log_retention_in_days" {
+  default = 30
+}
+
+
+# key pair
+
+variable "ssh_pubkey_file" {
+  description = "Path to an SSH public key"
+  default     = "~/.ssh/id_rsa.pub"
 }
 
 
@@ -65,21 +79,6 @@ variable "app_count" {
 variable "secret_key" {
   description = "Flask Secret Key"
   default     = "foobar"
-}
-
-
-# logs
-
-variable "log_retention_in_days" {
-  default = 30
-}
-
-
-# key pair
-
-variable "ssh_pubkey_file" {
-  description = "Path to an SSH public key"
-  default     = "~/.ssh/id_rsa.pub"
 }
 
 

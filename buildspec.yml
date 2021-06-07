@@ -3,16 +3,15 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-west-1"
-    REACT_APP_API_SERVICE_URL: "http://flask-react-alb-828458753.us-west-1.elb.amazonaws.com"
+    REACT_APP_API_SERVICE_URL: "http://flask-react-alb-1132421372.us-west-1.elb.amazonaws.com"
 
 phases:
-  install:
-    runtime-versions:
-      docker: 18
   pre_build:
     commands:
       - echo logging in to ecr...
-      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - >
+        aws ecr get-login-password --region $AWS_REGION \
+          | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
       - |
         if expr "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" >/dev/null  && expr "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" >/dev/null; then
           DOCKER_TAG=prod
