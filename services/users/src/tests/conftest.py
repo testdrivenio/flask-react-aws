@@ -1,6 +1,3 @@
-# services/users/src/tests/conftest.py
-
-
 import pytest
 
 from src import create_app, db

@@ -1,6 +1,3 @@
-# services/users/src/tests/test_auth.py
-
-
 import json
 
 import pytest

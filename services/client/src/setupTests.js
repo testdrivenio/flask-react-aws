@@ -14,7 +14,11 @@ global.renderWithRouter = function renderWithRouter(
   } = {}
 ) {
   return {
-    ...render(<Router history={history}>{ui}</Router>),
+    ...render(
+      <Router location={history.location} navigator={history}>
+        {ui}
+      </Router>
+    ),
     history,
   };
 };

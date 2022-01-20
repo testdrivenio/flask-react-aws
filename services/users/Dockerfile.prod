@@ -1,9 +1,5 @@
-###########
-# BUILDER #
-###########
-
 # pull official base image
-FROM python:3.9.5-slim-buster as builder
+FROM python:3.10.1-slim-buster
 
 # set working directory
 WORKDIR /usr/src/app
@@ -14,57 +10,17 @@ ENV PYTHONUNBUFFERED 1
 
 # install system dependencies
 RUN apt-get update \
-  && apt-get -y install gcc postgresql \
+  && apt-get -y install netcat \
   && apt-get clean
 
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
-
-# lint
-COPY . .
-RUN pip install black==21.5b1 flake8===3.9.2 isort==5.8.0
-RUN flake8 src
-RUN black src --check
-RUN isort src --check-only
-
-
-#########
-# FINAL #
-#########
-
-# pull official base image
-FROM python:3.9.5-slim-buster
-
-# set work directory
-WORKDIR /usr/src/app
-
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV FLASK_ENV production
-ENV APP_SETTINGS src.config.ProductionConfig
-ARG SECRET_KEY
-ENV SECRET_KEY $SECRET_KEY
-
-# install system dependencies
-RUN apt-get update \
-  && apt-get -y install gcc postgresql \
-  && apt-get clean
-
-# install dependencies
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache /wheels/*
+RUN pip install -r requirements.txt
 
 # add app
 COPY . .
 
-# add and run as non-root user
-RUN adduser --disabled-password myuser
-USER myuser
-
-# run gunicorn
-CMD gunicorn --bind 0.0.0.0:$PORT manage:app
+# add entrypoint.prod.sh
+COPY ./entrypoint.prod.sh .
+RUN chmod +x /usr/src/app/entrypoint.prod.sh

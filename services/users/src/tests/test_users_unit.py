@@ -1,4 +1,4 @@
-# services/users/src/tests/test_users_unit.py
+# src/tests/test_users_unit.py
 
 
 import json
@@ -54,9 +54,7 @@ def test_add_user_invalid_json_keys(test_app, monkeypatch):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps(
-            {"email": "john@testdriven.io", "password": "greaterthaneight"}
-        ),
+        data=json.dumps({"email": "john@testdriven.io"}),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -68,7 +66,7 @@ def test_add_user_duplicate_email(test_app, monkeypatch):
     def mock_get_user_by_email(email):
         return True
 
-    def mock_add_user(username, email):
+    def mock_add_user(username, email, password):
         return True
 
     monkeypatch.setattr(

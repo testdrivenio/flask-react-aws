@@ -1,6 +1,3 @@
-# services/users/src/tests/test_user_model.py
-
-
 from src.api.users.models import User
 
 
