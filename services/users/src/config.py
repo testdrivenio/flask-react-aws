@@ -1,6 +1,3 @@
-# services/users/src/config.py
-
-
 import os
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 class UserStatus extends Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class UserStatus extends Component {
   }
   render() {
     if (!this.props.isAuthenticated()) {
-      return <Redirect to="/login" />;
+      return <Navigate to="/login" replace />;
     }
     return (
       <div>

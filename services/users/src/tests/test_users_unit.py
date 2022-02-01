@@ -1,6 +1,3 @@
-# services/users/src/tests/test_users_unit.py
-
-
 import json
 from datetime import datetime
 

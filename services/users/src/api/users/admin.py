@@ -1,6 +1,3 @@
-# services/users/src/api/users/admin.py
-
-
 from flask import current_app
 from flask_admin.contrib.sqla import ModelView
 

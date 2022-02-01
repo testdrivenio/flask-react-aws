@@ -1,6 +1,3 @@
-# services/users/src/api/__init__.py
-
-
 from flask_restx import Api
 
 from src.api.auth import auth_namespace

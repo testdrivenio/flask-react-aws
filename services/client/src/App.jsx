@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Modal from "react-modal";
 
-import AddUser from "./components/AddUser";
 import About from "./components/About";
+import AddUser from "./components/AddUser";
 import LoginForm from "./components/LoginForm";
 import Message from "./components/Message";
-import Modal from "react-modal";
 import NavBar from "./components/NavBar";
 import RegisterForm from "./components/RegisterForm";
 import UsersList from "./components/UsersList";
@@ -39,9 +39,9 @@ class App extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.getUsers();
-  };
+  }
 
   addUser = (data) => {
     axios
@@ -191,11 +191,11 @@ class App extends Component {
             <div className="columns">
               <div className="column is-half">
                 <br />
-                <Switch>
+                <Routes>
                   <Route
                     exact
                     path="/"
-                    render={() => (
+                    element={
                       <div>
                         <h1 className="title is-1">Users</h1>
                         <hr />
@@ -237,42 +237,42 @@ class App extends Component {
                           isAuthenticated={this.isAuthenticated}
                         />
                       </div>
-                    )}
+                    }
                   />
-                  <Route exact path="/about" component={About} />
+                  <Route exact path="/about" element={<About />} />
                   <Route
                     exact
                     path="/register"
-                    render={() => (
+                    element={
                       <RegisterForm
                         // eslint-disable-next-line react/jsx-handler-names
                         handleRegisterFormSubmit={this.handleRegisterFormSubmit}
                         isAuthenticated={this.isAuthenticated}
                       />
-                    )}
+                    }
                   />
                   <Route
                     exact
                     path="/login"
-                    render={() => (
+                    element={
                       <LoginForm
                         // eslint-disable-next-line react/jsx-handler-names
                         handleLoginFormSubmit={this.handleLoginFormSubmit}
                         isAuthenticated={this.isAuthenticated}
                       />
-                    )}
+                    }
                   />
                   <Route
                     exact
                     path="/status"
-                    render={() => (
+                    element={
                       <UserStatus
                         accessToken={this.state.accessToken}
                         isAuthenticated={this.isAuthenticated}
                       />
-                    )}
+                    }
                   />
-                </Switch>
+                </Routes>
               </div>
             </div>
           </div>

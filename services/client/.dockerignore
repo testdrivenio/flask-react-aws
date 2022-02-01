@@ -1,6 +1,5 @@
 node_modules
 coverage
 build
-.dockerignore
 Dockerfile
 Dockerfile.prod

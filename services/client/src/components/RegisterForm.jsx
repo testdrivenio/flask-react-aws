@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import "./form.css";
 
 const RegisterForm = (props) => {
   if (props.isAuthenticated()) {
-    return <Redirect to="/" />;
+    return <Navigate to="/" replace />;
   }
   return (
     <div>

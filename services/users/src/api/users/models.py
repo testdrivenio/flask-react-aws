@@ -1,5 +1,3 @@
-# services/users/src/api/users/models.py
-
 import datetime
 import os
 
