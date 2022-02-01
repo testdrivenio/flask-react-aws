@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+<<<<<<< HEAD
 import { Route, Routes } from "react-router-dom";
 import Modal from "react-modal";
 
@@ -7,6 +8,15 @@ import About from "./components/About";
 import AddUser from "./components/AddUser";
 import LoginForm from "./components/LoginForm";
 import Message from "./components/Message";
+=======
+import { Route, Switch } from "react-router-dom";
+
+import AddUser from "./components/AddUser";
+import About from "./components/About";
+import LoginForm from "./components/LoginForm";
+import Message from "./components/Message";
+import Modal from "react-modal";
+>>>>>>> e4f2f7071947d2dfd2a942b8fa916b92744eb446
 import NavBar from "./components/NavBar";
 import RegisterForm from "./components/RegisterForm";
 import UsersList from "./components/UsersList";
@@ -41,7 +51,11 @@ class App extends Component {
 
   componentDidMount() {
     this.getUsers();
+<<<<<<< HEAD
   }
+=======
+  };
+>>>>>>> e4f2f7071947d2dfd2a942b8fa916b92744eb446
 
   addUser = (data) => {
     axios
