@@ -1,0 +1,88 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RegisterForm > renders 1`] = `
+<DocumentFragment>
+  <div
+    class="css-vhbdca"
+  >
+    <h1
+      class="chakra-heading css-ov0hf1"
+    >
+      Register
+    </h1>
+    <form
+      action="#"
+    >
+      <div
+        class="chakra-stack css-1xb2ccj"
+      >
+        <div
+          class="chakra-form-control css-0"
+          role="group"
+        >
+          <label
+            class="chakra-form__label css-uvho5g"
+            for="username"
+            id="field-:r6:-label"
+          >
+            Username
+          </label>
+          <input
+            class="chakra-input css-0"
+            id="username"
+            name="username"
+            placeholder="Enter a username"
+            value=""
+          />
+        </div>
+        <div
+          class="chakra-form-control css-0"
+          role="group"
+        >
+          <label
+            class="chakra-form__label css-uvho5g"
+            for="email"
+            id="field-:r7:-label"
+          >
+            Email
+          </label>
+          <input
+            class="chakra-input css-0"
+            id="email"
+            name="email"
+            placeholder="Enter an email address"
+            type="email"
+            value=""
+          />
+        </div>
+        <div
+          class="chakra-form-control css-0"
+          role="group"
+        >
+          <label
+            class="chakra-form__label css-uvho5g"
+            for="password"
+            id="field-:r8:-label"
+          >
+            Password
+          </label>
+          <input
+            class="chakra-input css-0"
+            id="password"
+            name="password"
+            placeholder="Enter a password"
+            type="password"
+            value=""
+          />
+        </div>
+        <button
+          class="chakra-button css-1lmcr0o"
+          type="submit"
+        >
+          Register
+        </button>
+      </div>
+    </form>
+  </div>
+</DocumentFragment>
+`;

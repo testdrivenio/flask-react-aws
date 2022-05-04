@@ -41,9 +41,7 @@ def test_add_user_invalid_json_keys(test_app, test_database):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps(
-            {"email": "john@testdriven.io", "password": "greaterthaneight"}
-        ),
+        data=json.dumps({"email": "john@testdriven.io"}),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -205,7 +203,7 @@ def test_update_user_duplicate_email(test_app, test_database, add_user):
     assert "Sorry. That email already exists." in data["message"]
 
 
-def test_update_user_with_passord(test_app, test_database, add_user):
+def test_update_user_with_password(test_app, test_database, add_user):
     password_one = "greaterthaneight"
     password_two = "somethingdifferent"
 

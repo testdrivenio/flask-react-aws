@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM node:17-alpine as builder
+FROM node:20.16.0 AS builder
 
 # set working directory
 WORKDIR /usr/src/app
@@ -15,18 +15,16 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json .
 COPY package-lock.json .
 RUN npm ci
-RUN npm install react-scripts@5.0.0 --silent
-
 
 # set environment variables
-ARG REACT_APP_API_SERVICE_URL
-ENV REACT_APP_API_SERVICE_URL $REACT_APP_API_SERVICE_URL
+ARG VITE_API_SERVICE_URL
+ENV VITE_API_SERVICE_URL=$VITE_API_SERVICE_URL
 ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
+ENV NODE_ENV=$NODE_ENV
 
 # create build
 COPY . .
-RUN npm run build
+RUN vite build
 
 
 #########
@@ -41,7 +39,7 @@ RUN rm -rf /etc/nginx/conf.d
 COPY conf /etc/nginx
 
 # copy static files
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 
 # expose port
 EXPOSE 80

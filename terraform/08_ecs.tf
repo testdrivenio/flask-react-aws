@@ -2,25 +2,18 @@ resource "aws_ecs_cluster" "fargate" {
   name = "${var.ecs_cluster_name}-cluster"
 }
 
-data "template_file" "client-app" {
-  template = file("templates/client_app.json.tpl")
-
-  vars = {
+locals {
+  client_app_json = templatefile("templates/client_app.json.tpl", {
     docker_image_url_client = var.docker_image_url_client
     region                  = var.region
-  }
-}
+  })
 
-data "template_file" "users-app" {
-  template = file("templates/users_app.json.tpl")
-  depends_on               = [aws_db_instance.production]
-
-  vars = {
+  users_app_json = templatefile("templates/users_app.json.tpl", {
     docker_image_url_users = var.docker_image_url_users
     region                 = var.region
-    secret_key             = var.secret_key
-    database_url           = "postgres://webapp:${var.rds_password}@${aws_db_instance.production.endpoint}/api_prod"
-  }
+    secret_key            = var.secret_key
+    database_url          = "postgres://webapp:${var.rds_password}@${aws_db_instance.production.endpoint}/api_prod"
+  })
 }
 
 resource "aws_ecs_task_definition" "client-app" {
@@ -31,7 +24,7 @@ resource "aws_ecs_task_definition" "client-app" {
   network_mode             = "awsvpc"
   memory                   = "512"
   cpu                      = "256"
-  container_definitions    = data.template_file.client-app.rendered
+  container_definitions    = local.client_app_json
 }
 
 resource "aws_ecs_task_definition" "users-app" {
@@ -42,7 +35,7 @@ resource "aws_ecs_task_definition" "users-app" {
   network_mode             = "awsvpc"
   memory                   = "512"
   cpu                      = "256"
-  container_definitions    = data.template_file.users-app.rendered
+  container_definitions    = local.users_app_json
   depends_on               = [aws_db_instance.production]
 }
 

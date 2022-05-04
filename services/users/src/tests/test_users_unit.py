@@ -51,9 +51,7 @@ def test_add_user_invalid_json_keys(test_app, monkeypatch):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps(
-            {"email": "john@testdriven.io", "password": "greaterthaneight"}
-        ),
+        data=json.dumps({"email": "john@testdriven.io"}),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
@@ -247,9 +245,6 @@ def test_update_user_invalid(
     test_app, monkeypatch, user_id, payload, status_code, message
 ):
     def mock_get_user_by_id(user_id):
-        return None
-
-    def mock_get_user_by_email(email):
         return None
 
     monkeypatch.setattr(src.api.users.views, "get_user_by_id", mock_get_user_by_id)

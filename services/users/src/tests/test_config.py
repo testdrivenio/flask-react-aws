@@ -15,7 +15,6 @@ def test_testing_config(test_app):
     test_app.config.from_object("src.config.TestingConfig")
     assert test_app.config["SECRET_KEY"] == "my_precious"
     assert test_app.config["TESTING"]
-    assert not test_app.config["PRESERVE_CONTEXT_ON_EXCEPTION"]
     assert test_app.config["SQLALCHEMY_DATABASE_URI"] == os.environ.get(
         "DATABASE_TEST_URL"
     )

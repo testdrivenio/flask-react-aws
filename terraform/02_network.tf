@@ -57,7 +57,7 @@ resource "aws_route_table_association" "private-route-2-association" {
 
 # Elastic IP
 resource "aws_eip" "elastic-ip-for-nat-gw" {
-  vpc                       = true
+  domain                    = "vpc"
   associate_with_private_ip = "10.0.0.5"
   depends_on                = [aws_internet_gateway.production-igw]
 }
@@ -84,4 +84,50 @@ resource "aws_route" "public-internet-igw-route" {
   route_table_id         = aws_route_table.public-route-table.id
   gateway_id             = aws_internet_gateway.production-igw.id
   destination_cidr_block = "0.0.0.0/0"
+}
+
+# networking
+
+variable "public_subnet_1_cidr" {
+  description = "CIDR Block for Public Subnet 1"
+  default     = "10.0.1.0/24"
+}
+variable "public_subnet_2_cidr" {
+  description = "CIDR Block for Public Subnet 2"
+  default     = "10.0.2.0/24"
+}
+variable "private_subnet_1_cidr" {
+  description = "CIDR Block for Private Subnet 1"
+  default     = "10.0.3.0/24"
+}
+variable "private_subnet_2_cidr" {
+  description = "CIDR Block for Private Subnet 2"
+  default     = "10.0.4.0/24"
+}
+variable "availability_zones" {
+  description = "Availability zones"
+  type        = list(string)
+  default     = ["us-west-1b", "us-west-1c"]
+}
+
+
+# RDS Security Group (traffic ECS -> RDS)
+resource "aws_security_group" "rds" {
+  name        = "rds-security-group"
+  description = "Allows inbound access from ECS only"
+  vpc_id      = aws_vpc.production-vpc.id
+
+  ingress {
+    protocol        = "tcp"
+    from_port       = "5432"
+    to_port         = "5432"
+    security_groups = [aws_security_group.ecs.id]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
