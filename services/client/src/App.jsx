@@ -69,7 +69,7 @@ class App extends Component {
     }, 3000);
   };
 
-  getUsers() {
+  getUsers = () => {
     axios
       .get(`${process.env.REACT_APP_API_SERVICE_URL}/users`)
       .then((res) => {
@@ -78,7 +78,7 @@ class App extends Component {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   handleCloseModal = () => {
     this.setState({ showModal: false });
@@ -151,7 +151,7 @@ class App extends Component {
       });
   };
 
-  validRefresh() {
+  validRefresh = () => {
     const token = window.localStorage.getItem("refreshToken");
     if (token) {
       axios
@@ -169,7 +169,7 @@ class App extends Component {
         });
     }
     return false;
-  }
+  };
 
   render() {
     return (

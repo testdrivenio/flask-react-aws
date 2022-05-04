@@ -41,9 +41,7 @@ def test_add_user_invalid_json_keys(test_app, test_database):
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps(
-            {"email": "john@testdriven.io", "password": "greaterthaneight"}
-        ),
+        data=json.dumps({"email": "john@testdriven.io"}),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())

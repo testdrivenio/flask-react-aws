@@ -8,6 +8,7 @@ from src.api.users.models import User
 
 auth_namespace = Namespace("auth")
 
+
 user = auth_namespace.model(
     "User",
     {
@@ -16,9 +17,11 @@ user = auth_namespace.model(
     },
 )
 
+
 full_user = auth_namespace.clone(
     "Full User", user, {"password": fields.String(required=True)}
 )
+
 
 login = auth_namespace.model(
     "Login User",

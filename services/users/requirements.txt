@@ -1,9 +1,9 @@
-flask==2.0.2
-Flask-Admin==1.5.8
-flask-bcrypt==0.7.1
+flask==2.1.1
+Flask-Admin==1.6.0
+flask-bcrypt==1.0.1
 flask-cors==3.0.10
 flask-restx==0.5.1
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.1.0
-psycopg2-binary==2.9.2
+psycopg2-binary==2.9.3
 pyjwt==2.3.0

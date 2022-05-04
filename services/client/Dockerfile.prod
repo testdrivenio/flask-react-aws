@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM node:17-alpine as builder
+FROM node:18-alpine as builder
 
 # set working directory
 WORKDIR /usr/src/app
