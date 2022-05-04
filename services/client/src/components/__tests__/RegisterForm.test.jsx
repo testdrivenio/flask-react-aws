@@ -1,5 +1,6 @@
 import React from "react";
 import { cleanup, fireEvent, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 import RegisterForm from "../RegisterForm";
 
@@ -65,9 +66,11 @@ describe("handles form validation correctly", () => {
 
     expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
 
-    fireEvent.blur(usernameInput);
-    fireEvent.blur(emailInput);
-    fireEvent.blur(passwordInput);
+    await act(async () => {
+      fireEvent.blur(usernameInput);
+      fireEvent.blur(emailInput);
+      fireEvent.blur(passwordInput);
+    });
 
     expect((await findByTestId("errors-username")).innerHTML).toBe(
       "Username is required."
@@ -79,7 +82,9 @@ describe("handles form validation correctly", () => {
       "Password is required."
     );
 
-    fireEvent.submit(form);
+    await act(async () => {
+      fireEvent.submit(form);
+    });
 
     await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
@@ -96,14 +101,18 @@ describe("handles form validation correctly", () => {
 
     expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
 
-    fireEvent.change(emailInput, { target: { value: "invalid" } });
-    fireEvent.blur(emailInput);
+    await act(async () => {
+      fireEvent.change(emailInput, { target: { value: "invalid" } });
+      fireEvent.blur(emailInput);
+    });
 
     expect((await findByTestId("errors-email")).innerHTML).toBe(
       "Enter a valid email."
     );
 
-    fireEvent.submit(form);
+    await act(async () => {
+      fireEvent.submit(form);
+    });
 
     await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
@@ -122,12 +131,14 @@ describe("handles form validation correctly", () => {
 
     expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
 
-    fireEvent.change(usernameInput, { target: { value: "null" } });
-    fireEvent.change(emailInput, { target: { value: "t@t.c" } });
-    fireEvent.change(passwordInput, { target: { value: "invalid" } });
-    fireEvent.blur(usernameInput);
-    fireEvent.blur(emailInput);
-    fireEvent.blur(passwordInput);
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: "null" } });
+      fireEvent.change(emailInput, { target: { value: "t@t.c" } });
+      fireEvent.change(passwordInput, { target: { value: "invalid" } });
+      fireEvent.blur(usernameInput);
+      fireEvent.blur(emailInput);
+      fireEvent.blur(passwordInput);
+    });
 
     expect((await findByTestId("errors-username")).innerHTML).toBe(
       "Username must be greater than 5 characters."
@@ -139,7 +150,9 @@ describe("handles form validation correctly", () => {
       "Password must be greater than 10 characters."
     );
 
-    fireEvent.submit(form);
+    await act(async () => {
+      fireEvent.submit(form);
+    });
 
     await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
@@ -158,14 +171,16 @@ describe("handles form validation correctly", () => {
 
     expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(0);
 
-    fireEvent.change(usernameInput, { target: { value: "proper" } });
-    fireEvent.change(emailInput, { target: { value: "t@t.com" } });
-    fireEvent.change(passwordInput, { target: { value: "properlength" } });
-    fireEvent.blur(usernameInput);
-    fireEvent.blur(emailInput);
-    fireEvent.blur(passwordInput);
+    await act(async () => {
+      fireEvent.change(usernameInput, { target: { value: "proper" } });
+      fireEvent.change(emailInput, { target: { value: "t@t.com" } });
+      fireEvent.change(passwordInput, { target: { value: "properlength" } });
+      fireEvent.blur(usernameInput);
+      fireEvent.blur(emailInput);
+      fireEvent.blur(passwordInput);
 
-    fireEvent.submit(form);
+      fireEvent.submit(form);
+    });
 
     await waitFor(() => {
       expect(mockProps.handleRegisterFormSubmit).toHaveBeenCalledTimes(1);

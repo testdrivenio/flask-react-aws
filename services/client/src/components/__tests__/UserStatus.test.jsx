@@ -1,6 +1,7 @@
 import React from "react";
-import { cleanup, waitFor } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import axios from "axios";
+import { act } from "react-dom/test-utils";
 
 import UserStatus from "../UserStatus";
 
@@ -24,7 +25,7 @@ it("renders properly when authenticated", async () => {
   const { container, findByTestId } = renderWithRouter(
     <UserStatus {...props} />
   );
-  await waitFor(() => {
+  await act(async () => {
     expect(axios).toHaveBeenCalledTimes(1);
   });
   expect((await findByTestId("user-email")).innerHTML).toBe("test@test.com");
@@ -39,7 +40,7 @@ it("renders", async () => {
   );
 
   const { asFragment } = renderWithRouter(<UserStatus {...props} />);
-  await waitFor(() => {
+  await act(async () => {
     expect(axios).toHaveBeenCalled();
   });
   expect(asFragment()).toMatchSnapshot();

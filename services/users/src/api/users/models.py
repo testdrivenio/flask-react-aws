@@ -19,12 +19,12 @@ class User(db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    @staticmethod
-    def decode_token(token):
-        payload = jwt.decode(
-            token, current_app.config.get("SECRET_KEY"), algorithms="HS256"
-        )
-        return payload["sub"]
+    def __init__(self, username="", email="", password=""):
+        self.username = username
+        self.email = email
+        self.password = bcrypt.generate_password_hash(
+            password, current_app.config.get("BCRYPT_LOG_ROUNDS")
+        ).decode()
 
     def encode_token(self, user_id, token_type):
         if token_type == "access":
@@ -41,12 +41,12 @@ class User(db.Model):
             payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
         )
 
-    def __init__(self, username="", email="", password=""):
-        self.username = username
-        self.email = email
-        self.password = bcrypt.generate_password_hash(
-            password, current_app.config.get("BCRYPT_LOG_ROUNDS")
-        ).decode()
+    @staticmethod
+    def decode_token(token):
+        payload = jwt.decode(
+            token, current_app.config.get("SECRET_KEY"), algorithms="HS256"
+        )
+        return payload["sub"]
 
 
 if os.getenv("FLASK_ENV") == "development":

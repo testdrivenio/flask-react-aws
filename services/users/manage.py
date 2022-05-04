@@ -7,7 +7,7 @@ app = create_app()
 cli = FlaskGroup(create_app=create_app)
 
 
-@cli.command('recreate_db')
+@cli.command("recreate_db")
 def recreate_db():
     db.drop_all()
     db.create_all()
@@ -21,5 +21,5 @@ def seed_db():
     db.session.commit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()
