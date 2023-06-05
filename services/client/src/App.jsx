@@ -3,14 +3,14 @@ import axios from "axios";
 import { Route, Routes } from "react-router-dom";
 import Modal from "react-modal";
 
-import About from "./components/About";
-import AddUser from "./components/AddUser";
-import LoginForm from "./components/LoginForm";
-import Message from "./components/Message";
-import NavBar from "./components/NavBar";
-import RegisterForm from "./components/RegisterForm";
 import UsersList from "./components/UsersList";
+import About from "./components/About";
+import NavBar from "./components/NavBar";
+import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import UserStatus from "./components/UserStatus";
+import Message from "./components/Message";
+import AddUser from "./components/AddUser";
 
 const modalStyles = {
   content: {
@@ -39,9 +39,9 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     this.getUsers();
-  }
+  };
 
   addUser = (data) => {
     axios
@@ -80,10 +80,6 @@ class App extends Component {
       });
   };
 
-  handleCloseModal = () => {
-    this.setState({ showModal: false });
-  };
-
   handleLoginFormSubmit = (data) => {
     const url = `${process.env.REACT_APP_API_SERVICE_URL}/auth/login`;
     axios
@@ -100,10 +96,6 @@ class App extends Component {
       });
   };
 
-  handleOpenModal = () => {
-    this.setState({ showModal: true });
-  };
-
   handleRegisterFormSubmit = (data) => {
     const url = `${process.env.REACT_APP_API_SERVICE_URL}/auth/register`;
     axios
@@ -116,6 +108,14 @@ class App extends Component {
         console.log(err);
         this.createMessage("danger", "That user already exists.");
       });
+  };
+
+  handleOpenModal = () => {
+    this.setState({ showModal: true });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ showModal: false });
   };
 
   isAuthenticated = () => {

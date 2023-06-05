@@ -3,7 +3,7 @@
 ###########
 
 # pull official base image
-FROM node:18-alpine as builder
+FROM node:19 as builder
 
 # set working directory
 WORKDIR /usr/src/app
@@ -15,7 +15,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json .
 COPY package-lock.json .
 RUN npm ci
-RUN npm install react-scripts@5.0.0 --silent
+RUN npm install react-scripts@5.0.1 --silent
 
 
 # set environment variables
@@ -34,7 +34,7 @@ RUN npm run build
 #########
 
 # base image
-FROM nginx:stable-alpine
+FROM nginx:stable
 
 # update nginx conf
 RUN rm -rf /etc/nginx/conf.d

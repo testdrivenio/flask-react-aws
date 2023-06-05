@@ -9,6 +9,7 @@ services:
     ports:
       - 5004:5000
     environment:
+      - FLASK_DEBUG=0
       - FLASK_ENV=production
       - APP_SETTINGS=src.config.ProductionConfig
       - DATABASE_URL=postgres://postgres:postgres@api-db:5432/api_prod

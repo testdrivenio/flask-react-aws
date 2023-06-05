@@ -1,6 +1,3 @@
-# src/tests/test_users_unit.py
-
-
 import json
 from datetime import datetime
 
@@ -248,9 +245,6 @@ def test_update_user_invalid(
     test_app, monkeypatch, user_id, payload, status_code, message
 ):
     def mock_get_user_by_id(user_id):
-        return None
-
-    def mock_get_user_by_email(email):
         return None
 
     monkeypatch.setattr(src.api.users.views, "get_user_by_id", mock_get_user_by_id)

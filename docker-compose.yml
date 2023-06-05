@@ -12,6 +12,7 @@ services:
     ports:
       - 5004:5000
     environment:
+      - FLASK_DEBUG=1
       - FLASK_ENV=development
       - APP_SETTINGS=src.config.DevelopmentConfig
       - DATABASE_URL=postgresql://postgres:postgres@api-db:5432/api_dev
