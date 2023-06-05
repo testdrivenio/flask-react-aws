@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-west-1"
-    REACT_APP_API_SERVICE_URL: "http://localhost:5004"
+    REACT_APP_API_SERVICE_URL: "http://flask-react-alb-394182493.us-west-1.elb.amazonaws.com"
 
 phases:
   pre_build:
