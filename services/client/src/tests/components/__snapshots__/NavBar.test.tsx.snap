@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavBar renders properly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-1ggpwrh"
+  >
+    <div
+      class="css-19pkskf"
+    >
+      <div
+        class="css-70qvj9"
+      >
+        <h1
+          class="chakra-heading navbar-item nav-title css-1x64xs0"
+        >
+          <a
+            class="chakra-link css-2s4j8o"
+            href="/"
+          >
+            Hello, World!
+          </a>
+        </h1>
+      </div>
+      <div
+        class="css-17xejub"
+      />
+      <div
+        class="css-xv0w4j"
+      >
+        <a
+          class="chakra-link css-fmj561"
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          class="chakra-link css-fmj561"
+          href="/register"
+        >
+          Register
+        </a>
+        <a
+          class="chakra-link css-fmj561"
+          href="/login"
+        >
+          Log In
+        </a>
+      </div>
+      <button
+        aria-label="Toggle Navigation"
+        class="chakra-button css-3cjmcm"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="chakra-icon css-onkibi"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="chakra-collapse"
+      style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+    >
+      <div
+        class="chakra-stack css-12jrb58"
+      >
+        <a
+          class="chakra-link css-fmj561"
+          href="/about"
+        >
+          About
+        </a>
+        <a
+          class="chakra-link css-fmj561"
+          href="/register"
+        >
+          Register
+        </a>
+        <a
+          class="chakra-link css-fmj561"
+          href="/login"
+        >
+          Log In
+        </a>
+      </div>
+    </div>
+  </div>
+  <span
+    hidden=""
+    id="__chakra_env"
+  />
+</DocumentFragment>
+`;

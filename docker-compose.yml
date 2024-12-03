@@ -1,14 +1,12 @@
-version: '3.8'
-
 services:
 
   api:
     build:
-      context: ./services/users
+      context: ./services/users  # updated
       dockerfile: Dockerfile
     entrypoint: ['/usr/src/app/entrypoint.sh']
     volumes:
-      - './services/users:/usr/src/app'
+      - './services/users:/usr/src/app'  # updated
     ports:
       - 5004:5000
     environment:
@@ -22,7 +20,7 @@ services:
 
   api-db:
     build:
-      context: ./services/users/src/db
+      context: ./services/users/src/db  # updated
       dockerfile: Dockerfile
     expose:
       - 5432
@@ -39,9 +37,9 @@ services:
       - './services/client:/usr/src/app'
       - '/usr/src/app/node_modules'
     ports:
-      - 3007:3000
+      - 3007:5173
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_SERVICE_URL=${REACT_APP_API_SERVICE_URL}
+      - VITE_API_SERVICE_URL=${VITE_API_SERVICE_URL}
     depends_on:
       - api

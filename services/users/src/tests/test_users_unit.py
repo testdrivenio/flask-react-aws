@@ -63,7 +63,7 @@ def test_add_user_duplicate_email(test_app, monkeypatch):
     def mock_get_user_by_email(email):
         return True
 
-    def mock_add_user(username, email, password):
+    def mock_add_user(username, email):
         return True
 
     monkeypatch.setattr(
