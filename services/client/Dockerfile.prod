@@ -1,0 +1,48 @@
+###########
+# BUILDER #
+###########
+
+# pull official base image
+FROM node:20.16.0 AS builder
+
+# set working directory
+WORKDIR /usr/src/app
+
+# add `/usr/src/app/node_modules/.bin` to $PATH
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# install and cache app dependencies
+COPY package.json .
+COPY package-lock.json .
+RUN npm ci
+
+# set environment variables
+ARG VITE_API_SERVICE_URL
+ENV VITE_API_SERVICE_URL=$VITE_API_SERVICE_URL
+ARG NODE_ENV
+ENV NODE_ENV=$NODE_ENV
+
+# create build
+COPY . .
+RUN vite build
+
+
+#########
+# FINAL #
+#########
+
+# base image
+FROM nginx:stable-alpine
+
+# update nginx conf
+RUN rm -rf /etc/nginx/conf.d
+COPY conf /etc/nginx
+
+# copy static files
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+
+# expose port
+EXPOSE 80
+
+# run nginx
+CMD ["nginx", "-g", "daemon off;"]
