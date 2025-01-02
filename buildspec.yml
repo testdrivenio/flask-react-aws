@@ -3,18 +3,25 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-west-1"
-    VITE_API_SERVICE_URL: "http://flask-react-alb-1789856345.us-west-1.elb.amazonaws.com"
+    REACT_APP_API_SERVICE_URL: "http://<LOAD_BALANCER_DNS_NAME>"
 
 phases:
   pre_build:
     commands:
       - echo logging in to ecr...
-      - >
-        aws ecr get-login-password --region $AWS_REGION \
-          | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod || true
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - |
+        if expr "$CODEBUILD_WEBHOOK_TRIGGER" == "branch/master" >/dev/null && expr "$CODEBUILD_WEBHOOK_HEAD_REF" == "refs/heads/master" >/dev/null; then
+          DOCKER_TAG=prod
+        else
+          DOCKER_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+        fi
+      - echo "Docker tag $DOCKER_TAG"
+      - echo "Current branch trigger $CODEBUILD_WEBHOOK_TRIGGER"
+      - echo "Current HEAD ref $CODEBUILD_WEBHOOK_HEAD_REF"
+      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG || true
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder || true
-      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod || true
+      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG || true
   build:
     commands:
       - echo building and testing dev images...
@@ -27,32 +34,15 @@ phases:
       - docker-compose exec -T client npm run prettier:check
       - docker-compose exec -T client npm run prettier:write
       - echo building prod images...
-      - >
-        docker build \
-          --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod \
-          -f services/users/Dockerfile.prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod \
-          ./services/users
-      - >
-        docker build \
-          --target builder \
-          --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder \
-          -f services/client/Dockerfile.prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder \
-          --build-arg NODE_ENV=production \
-          --build-arg VITE_API_SERVICE_URL=$VITE_API_SERVICE_URL \
-          ./services/client
-      - >
-        docker build \
-          --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod \
-          -f services/client/Dockerfile.prod \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod \
-          ./services/client
+      - docker build --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG -f services/users/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG ./services/users
+      - docker build --target builder --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder -f services/client/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder --build-arg NODE_ENV=production --build-arg REACT_APP_API_SERVICE_URL=$REACT_APP_API_SERVICE_URL ./services/client
+      - docker build --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG -f services/client/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG ./services/client
   post_build:
     commands:
-    - echo pushing prod images to ecr...
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:prod
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:prod
-    - chmod +x ./deploy.sh
-    - bash deploy.sh
+      - echo "Using docker tag $DOCKER_TAG"
+      - echo pushing prod images to ecr...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG
+      - chmod +x ./deploy.sh
+      - bash deploy.sh
