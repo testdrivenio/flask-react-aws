@@ -27,7 +27,7 @@ update_service() {
 
 deploy_cluster() {
 
-  cluster="flask-react-cluster"
+  cluster="flask-react-cluster-1"
 
   # users
   service="flask-react-users-service"
