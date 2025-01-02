@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     AWS_REGION: "us-west-1"
-    REACT_APP_API_SERVICE_URL: "http://<LOAD_BALANCER_DNS_NAME>"
+    VITE_API_SERVICE_URL: "http://<LOAD_BALANCER_DNS_NAME>"
 
 phases:
   pre_build:
@@ -35,7 +35,7 @@ phases:
       - docker-compose exec -T client npm run prettier:write
       - echo building prod images...
       - docker build --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG -f services/users/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-users:$DOCKER_TAG ./services/users
-      - docker build --target builder --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder -f services/client/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder --build-arg NODE_ENV=production --build-arg REACT_APP_API_SERVICE_URL=$REACT_APP_API_SERVICE_URL ./services/client
+      - docker build --target builder --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder -f services/client/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:builder --build-arg NODE_ENV=production --build-arg VITE_API_SERVICE_URL=$VITE_API_SERVICE_URL ./services/client
       - docker build --cache-from $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG -f services/client/Dockerfile.prod -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/test-driven-client:$DOCKER_TAG ./services/client
   post_build:
     commands:
