@@ -24,11 +24,11 @@ variable "ecs_cluster_name" {
 }
 variable "docker_image_url_client" {
   description = "Docker client image to run in the ECS cluster"
-  default     = "046505967931.dkr.ecr.us-west-1.amazonaws.com/test-driven-client-fargate:prod"
+  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/test-driven-client-fargate:prod"
 }
 variable "docker_image_url_users" {
   description = "Docker users image to run in the ECS cluster"
-  default     = "046505967931.dkr.ecr.us-west-1.amazonaws.com/test-driven-users-fargate:prod"
+  default     = "<AWS_ACCOUNT_ID>.dkr.ecr.us-west-1.amazonaws.com/test-driven-users-fargate:prod"
 }
 variable "app_count" {
   description = "Number of Docker containers to run"
